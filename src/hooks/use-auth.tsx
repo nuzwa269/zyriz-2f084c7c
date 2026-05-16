@@ -7,33 +7,33 @@ export function useAuth() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const refreshAdminStatus = async (s: Session | null) => {
-    setSession(s);
-    if (!s?.user) {
-      setIsAdmin(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.rpc("has_role", {
-        _user_id: s.user.id,
-        _role: "admin",
-      });
-      if (error) throw error;
-      setIsAdmin(!!data);
-    } catch (error) {
-      console.error(error);
-      setIsAdmin(false);
-    }
-  };
-
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-      setTimeout(() => void refreshAdminStatus(s), 0);
+      setSession(s);
+      if (s?.user) {
+        setTimeout(async () => {
+          const { data } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", s.user.id)
+            .eq("role", "admin")
+            .maybeSingle();
+          setIsAdmin(!!data);
+        }, 0);
+      } else setIsAdmin(false);
     });
 
     supabase.auth.getSession().then(async ({ data }) => {
-      await refreshAdminStatus(data.session);
+      setSession(data.session);
+      if (data.session?.user) {
+        const { data: r } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", data.session.user.id)
+          .eq("role", "admin")
+          .maybeSingle();
+        setIsAdmin(!!r);
+      }
       setLoading(false);
     });
 
