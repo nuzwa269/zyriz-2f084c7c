@@ -56,6 +56,7 @@ export type Database = {
           is_new_arrival: boolean
           name: string
           price: number
+          sale_price: number | null
           slug: string
           stock: number
           updated_at: string
@@ -69,6 +70,7 @@ export type Database = {
           is_new_arrival?: boolean
           name: string
           price?: number
+          sale_price?: number | null
           slug: string
           stock?: number
           updated_at?: string
@@ -82,6 +84,7 @@ export type Database = {
           is_new_arrival?: boolean
           name?: string
           price?: number
+          sale_price?: number | null
           slug?: string
           stock?: number
           updated_at?: string

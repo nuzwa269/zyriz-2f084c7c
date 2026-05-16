@@ -40,6 +40,7 @@ function EditProduct() {
           slug: data.slug,
           description: data.description ?? "",
           price: Number(data.price),
+          sale_price: data.sale_price != null ? Number(data.sale_price) : null,
           color: data.color ?? "",
           stock: data.stock,
           is_featured: data.is_featured,

@@ -22,7 +22,7 @@ function ShopPage() {
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["shop-products", sort],
     queryFn: async () => {
-      let q = supabase.from("products").select("id, slug, name, price, is_new_arrival, product_images(storage_path, display_order)");
+      let q = supabase.from("products").select("id, slug, name, price, sale_price, is_new_arrival, product_images(storage_path, display_order)");
       if (sort === "newest") q = q.order("created_at", { ascending: false });
       else if (sort === "price-asc") q = q.order("price", { ascending: true });
       else q = q.order("price", { ascending: false });
@@ -59,9 +59,9 @@ function ShopPage() {
           <p className="text-center text-muted-foreground py-12">No products available yet.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((p) => {
-              const img = p.product_images?.sort((a, b) => a.display_order - b.display_order)[0]?.storage_path;
-              return <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} image={img} isNew={p.is_new_arrival} />;
+            {products.map((p: any) => {
+              const img = p.product_images?.sort((a: any, b: any) => a.display_order - b.display_order)[0]?.storage_path;
+              return <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={img} isNew={p.is_new_arrival} />;
             })}
           </div>
         )}
