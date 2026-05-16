@@ -18,6 +18,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as ApiAdminStatusRouteImport } from './routes/api/admin-status'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminProductsNewRouteImport } from './routes/_authenticated/admin.products.new'
 import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
@@ -66,6 +67,11 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
   path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminStatusRoute = ApiAdminStatusRouteImport.update({
+  id: '/api/admin-status',
+  path: '/api/admin-status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
+  '/api/admin-status': typeof ApiAdminStatusRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
+  '/api/admin-status': typeof ApiAdminStatusRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
+  '/api/admin-status': typeof ApiAdminStatusRoute
   '/product/$slug': typeof ProductSlugRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/shop'
+    | '/api/admin-status'
     | '/product/$slug'
     | '/admin/'
     | '/admin/products/$id'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/shop'
+    | '/api/admin-status'
     | '/product/$slug'
     | '/admin'
     | '/admin/products/$id'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/login'
     | '/shop'
+    | '/api/admin-status'
     | '/product/$slug'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/products/$id'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   LoginRoute: typeof LoginRoute
   ShopRoute: typeof ShopRoute
+  ApiAdminStatusRoute: typeof ApiAdminStatusRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
@@ -245,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin-status': {
+      id: '/api/admin-status'
+      path: '/api/admin-status'
+      fullPath: '/api/admin-status'
+      preLoaderRoute: typeof ApiAdminStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
       path: '/admin'
@@ -294,8 +314,19 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   LoginRoute: LoginRoute,
   ShopRoute: ShopRoute,
+  ApiAdminStatusRoute: ApiAdminStatusRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
