@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ProductCard } from "@/components/ProductCard";
 import { useCart } from "@/lib/cart";
 import { productImageUrl } from "@/lib/image-url";
+import { supabase } from "@/integrations/supabase/client";
 import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/cart")({
@@ -12,6 +15,22 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, setQty, remove, total } = useCart();
+  const excludeIds = items.map((i) => i.productId);
+
+  const { data: related = [] } = useQuery({
+    queryKey: ["cart-related", excludeIds.sort().join(",")],
+    queryFn: async () => {
+      let q = supabase
+        .from("products")
+        .select("id, slug, name, price, sale_price, is_new_arrival, product_images(storage_path, display_order)")
+        .order("created_at", { ascending: false })
+        .limit(8);
+      if (excludeIds.length > 0) q = q.not("id", "in", `(${excludeIds.join(",")})`);
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data ?? []).slice(0, 4);
+    },
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,6 +87,34 @@ function CartPage() {
               </Link>
             </div>
           </div>
+        )}
+
+        {related.length > 0 && (
+          <section className="mt-16 sm:mt-20">
+            <div className="mb-6 sm:mb-8 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-primary">You may also like</p>
+                <h2 className="font-serif text-2xl sm:text-3xl mt-1 gold-gradient">Related Products</h2>
+              </div>
+              <Link to="/shop" className="text-sm text-muted-foreground hover:text-primary whitespace-nowrap">View all →</Link>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+              {related.map((p: any) => {
+                const img = p.product_images?.sort((a: any, b: any) => a.display_order - b.display_order)[0]?.storage_path;
+                return (
+                  <ProductCard
+                    key={p.id}
+                    slug={p.slug}
+                    name={p.name}
+                    price={Number(p.price)}
+                    salePrice={p.sale_price != null ? Number(p.sale_price) : null}
+                    image={img}
+                    isNew={p.is_new_arrival}
+                  />
+                );
+              })}
+            </div>
+          </section>
         )}
       </div>
       <Footer />
