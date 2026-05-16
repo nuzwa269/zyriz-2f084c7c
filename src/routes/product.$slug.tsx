@@ -158,7 +158,10 @@ function ProductPage() {
                 price: Number(product.price),
                 availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
               },
-            }),
+            })
+              .replace(/</g, "\\u003c")
+              .replace(/>/g, "\\u003e")
+              .replace(/&/g, "\\u0026"),
           }} />
         </div>
       </article>
