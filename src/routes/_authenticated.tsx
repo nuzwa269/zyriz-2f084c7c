@@ -56,6 +56,7 @@ function AuthLayout() {
           <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
             <Link to="/admin" className="font-serif text-lg sm:text-xl gold-gradient truncate">{SITE.name} Admin</Link>
             <Link to="/admin" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Products</Link>
+            <Link to="/admin/categories" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Categories</Link>
             <Link to="/" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">View Site</Link>
           </div>
           <div className="flex items-center gap-1 sm:gap-3 shrink-0">
