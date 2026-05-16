@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { SITE } from "@/lib/config";
-import { ArrowRight, Sparkles, Truck, ShieldCheck } from "lucide-react";
+import { ArrowRight, Sparkles, Truck, ShieldCheck, Star, Quote } from "lucide-react";
 import heroImg from "@/assets/hero-jewelry.jpg";
 
 export const Route = createFileRoute("/")({
