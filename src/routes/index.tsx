@@ -38,6 +38,9 @@ function HomePage() {
   const newArrivals = products.filter((p) => p.is_new_arrival).slice(0, 4);
   const display = featured.length ? featured : products.slice(0, 4);
   const arrivals = newArrivals.length ? newArrivals : products.slice(0, 4);
+  const usedIds = new Set([...display.map((p) => p.id), ...arrivals.map((p) => p.id)]);
+  const bestSellers = products.filter((p) => !usedIds.has(p.id)).slice(0, 4);
+  const sellers = bestSellers.length ? bestSellers : products.slice(0, 4);
 
   const firstImage = (p: typeof products[0]) =>
     p.product_images?.sort((a, b) => a.display_order - b.display_order)[0]?.storage_path;
