@@ -2,9 +2,8 @@
 export const SITE = {
   name: "Zyriz",
   tagline: "Turkish Gold-Plated Earrings",
-  description:
-    "Discover exquisite Turkish-style, gold-plated earrings — handcrafted elegance for the modern woman.",
-  whatsappNumber: "923001234567", // international format, no + or spaces
+  description: "Discover exquisite Turkish-style, gold-plated earrings — handcrafted elegance for the modern woman.",
+  whatsappNumber: "923214858587", // international format, no + or spaces
   email: "hello@zyriz.com",
   payment: {
     jazzCash: { account: "Zyriz", number: "0321 4858587" },
