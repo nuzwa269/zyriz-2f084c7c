@@ -88,6 +88,34 @@ function CartPage() {
             </div>
           </div>
         )}
+
+        {related.length > 0 && (
+          <section className="mt-16 sm:mt-20">
+            <div className="mb-6 sm:mb-8 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-primary">You may also like</p>
+                <h2 className="font-serif text-2xl sm:text-3xl mt-1 gold-gradient">Related Products</h2>
+              </div>
+              <Link to="/shop" className="text-sm text-muted-foreground hover:text-primary whitespace-nowrap">View all →</Link>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+              {related.map((p: any) => {
+                const img = p.product_images?.sort((a: any, b: any) => a.display_order - b.display_order)[0]?.storage_path;
+                return (
+                  <ProductCard
+                    key={p.id}
+                    slug={p.slug}
+                    name={p.name}
+                    price={Number(p.price)}
+                    salePrice={p.sale_price != null ? Number(p.sale_price) : null}
+                    image={img}
+                    isNew={p.is_new_arrival}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
       </div>
       <Footer />
     </div>
