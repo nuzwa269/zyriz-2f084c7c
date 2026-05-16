@@ -38,6 +38,9 @@ function HomePage() {
   const newArrivals = products.filter((p) => p.is_new_arrival).slice(0, 4);
   const display = featured.length ? featured : products.slice(0, 4);
   const arrivals = newArrivals.length ? newArrivals : products.slice(0, 4);
+  const usedIds = new Set([...display.map((p) => p.id), ...arrivals.map((p) => p.id)]);
+  const bestSellers = products.filter((p) => !usedIds.has(p.id)).slice(0, 4);
+  const sellers = bestSellers.length ? bestSellers : products.slice(0, 4);
 
   const firstImage = (p: typeof products[0]) =>
     p.product_images?.sort((a, b) => a.display_order - b.display_order)[0]?.storage_path;
@@ -125,6 +128,23 @@ function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {arrivals.map((p: any) => (
               <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={firstImage(p)} isNew />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {sellers.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+          <div className="flex items-end justify-between gap-3 mb-6 md:mb-8">
+            <div className="min-w-0">
+              <p className="text-xs uppercase tracking-[0.3em] text-primary">Bestsellers</p>
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl mt-2">Best Sellers</h2>
+            </div>
+            <Link to="/shop" className="text-sm text-primary hover:underline shrink-0">View all →</Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            {sellers.map((p: any) => (
+              <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={firstImage(p)} isNew={p.is_new_arrival} />
             ))}
           </div>
         </section>
