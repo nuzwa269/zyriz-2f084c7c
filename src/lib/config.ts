@@ -4,10 +4,10 @@ export const SITE = {
   tagline: "Turkish Gold-Plated Earrings",
   description: "Discover exquisite Turkish-style, gold-plated earrings — handcrafted elegance for the modern woman.",
   whatsappNumber: "923214858587", // international format, no + or spaces
-  email: "hello@zyriz.com",
+  email: "zyrizzee@gmail.com",
   payment: {
-    jazzCash: { account: "Zyriz", number: "0321 4858587" },
-    easyPaisa: { account: "Zyriz", number: "0321 4858587" },
+    jazzCash: { account: "Nuzhat Waseem", number: "0321 4858587" },
+    easyPaisa: { account: "Zyriz", number: ".... ......." },
     bank: { bank: "Meezan Bank", account: "Zyriz", iban: "PK00MEZN0000000000000000" },
   },
 };
