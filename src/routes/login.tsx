@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { SITE } from "@/lib/config";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Admin Login — Zarrin Atelier" }] }),
+  head: () => ({ meta: [{ title: "Admin Login — Zyriz" }] }),
   component: LoginPage,
 });
 

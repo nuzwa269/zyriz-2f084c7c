@@ -9,7 +9,7 @@ import { useState } from "react";
 export const Route = createFileRoute("/shop")({
   head: () => ({
     meta: [
-      { title: "Shop All Earrings — Zarrin Atelier" },
+      { title: "Shop All Earrings — Zyriz" },
       { name: "description", content: "Browse our complete collection of Turkish gold-plated earrings." },
     ],
   }),

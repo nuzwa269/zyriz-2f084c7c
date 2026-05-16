@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Zarrin Atelier" },
+      { title: "About — Zyriz" },
       { name: "description", content: "Our story: handcrafted Turkish gold-plated earrings for the modern woman." },
     ],
   }),
@@ -18,10 +18,10 @@ function AboutPage() {
       <Header />
       <article className="mx-auto max-w-3xl px-4 sm:px-6 py-20">
         <p className="text-xs uppercase tracking-[0.3em] text-primary text-center">Our Story</p>
-        <h1 className="font-serif text-5xl text-center mt-3 gold-gradient">About Zarrin Atelier</h1>
+        <h1 className="font-serif text-5xl text-center mt-3 gold-gradient">About Zyriz</h1>
         <div className="mt-10 space-y-6 text-muted-foreground leading-relaxed">
           <p>
-            Born from a love of ancient craftsmanship and modern femininity, Zarrin Atelier brings you authentic Turkish-style, gold-plated earrings — each piece a small ode to timeless beauty.
+            Born from a love of ancient craftsmanship and modern femininity, Zyriz brings you authentic Turkish-style, gold-plated earrings — each piece a small ode to timeless beauty.
           </p>
           <p>
             Every earring in our collection is hand-selected for its quality, its glow, and the story it carries. Our pieces are designed to be worn every day and remembered every time.

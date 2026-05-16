@@ -11,7 +11,7 @@ import { useState } from "react";
 import { MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/checkout")({
-  head: () => ({ meta: [{ title: "Checkout — Zarrin Atelier" }] }),
+  head: () => ({ meta: [{ title: "Checkout — Zyriz" }] }),
   component: CheckoutPage,
 });
 
