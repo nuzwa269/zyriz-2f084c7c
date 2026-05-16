@@ -46,6 +46,18 @@ export function ProductForm({
     is_featured: initial?.is_featured ?? false,
     is_new_arrival: initial?.is_new_arrival ?? true,
     is_best_seller: initial?.is_best_seller ?? false,
+    category_id: initial?.category_id ?? null,
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories-list"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
   });
   const [images, setImages] = useState(initialImages);
   const [uploading, setUploading] = useState(false);
