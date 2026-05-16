@@ -6,7 +6,7 @@ import { productImageUrl } from "@/lib/image-url";
 import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/cart")({
-  head: () => ({ meta: [{ title: "Your Cart — Zarrin Atelier" }] }),
+  head: () => ({ meta: [{ title: "Your Cart — Zyriz" }] }),
   component: CartPage,
 });
 
