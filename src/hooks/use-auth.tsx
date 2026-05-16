@@ -7,7 +7,7 @@ export function useAuth() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAdmin = async (userId: string) => {
+  const checkAdmin = async () => {
     const { data: sessionData } = await supabase.auth.getSession();
     const token = sessionData.session?.access_token;
     if (!token) {
@@ -27,7 +27,7 @@ export function useAuth() {
       setSession(s);
       if (s?.user) {
         setLoading(false);
-        setTimeout(() => void checkAdmin(s.user.id), 0);
+        setTimeout(() => void checkAdmin(), 0);
       } else {
         setIsAdmin(false);
         setLoading(false);
@@ -38,7 +38,7 @@ export function useAuth() {
       setSession(data.session);
       if (data.session?.user) {
         setLoading(false);
-        await checkAdmin(data.session.user.id);
+        await checkAdmin();
       } else {
         setLoading(false);
       }
