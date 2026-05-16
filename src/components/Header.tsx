@@ -1,11 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Menu, X, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
+import { useTheme } from "@/hooks/use-theme";
 import { SITE } from "@/lib/config";
 
 export function Header() {
   const { count } = useCart();
+  const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const nav = [
     { to: "/", label: "Home" },
