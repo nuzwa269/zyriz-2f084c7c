@@ -33,6 +33,17 @@ function HomePage() {
     queryKey: ["home-products"],
     queryFn: fetchHomeProducts,
   });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["home-categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, slug, name, image_path")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
 
   const featured = products.filter((p) => p.is_featured).slice(0, 4);
   const newArrivals = products.filter((p) => p.is_new_arrival).slice(0, 4);
