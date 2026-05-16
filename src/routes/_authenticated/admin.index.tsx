@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { productImageUrl } from "@/lib/image-url";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Package, Star, Sparkles, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
@@ -23,6 +23,13 @@ function AdminProducts() {
     },
   });
 
+  const stats = [
+    { label: "Total products", value: products.length, icon: Package },
+    { label: "Featured", value: products.filter((p) => p.is_featured).length, icon: Star },
+    { label: "New arrivals", value: products.filter((p) => p.is_new_arrival).length, icon: Sparkles },
+    { label: "Low stock", value: products.filter((p) => Number(p.stock) <= 3).length, icon: AlertTriangle },
+  ];
+
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this product? This cannot be undone.")) return;
     const { error } = await supabase.from("products").delete().eq("id", id);
@@ -36,10 +43,29 @@ function AdminProducts() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-serif text-3xl">Products</h1>
+        <div>
+          <p className="text-sm text-muted-foreground">Admin Dashboard</p>
+          <h1 className="font-serif text-3xl">Product management</h1>
+        </div>
         <Link to="/admin/products/new" className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
           <Plus className="h-4 w-4" /> Add Product
         </Link>
+      </div>
+
+      <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((item) => (
+          <div key={item.label} className="rounded-lg border border-border bg-card p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">{item.label}</p>
+                <p className="mt-2 text-3xl font-semibold text-foreground">{item.value}</p>
+              </div>
+              <span className="rounded-md bg-primary/10 p-2 text-primary">
+                <item.icon className="h-5 w-5" />
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
 
       {isLoading ? (
