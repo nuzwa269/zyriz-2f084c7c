@@ -35,6 +35,13 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="p-2 text-foreground hover:text-primary transition"
+          >
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
           <Link to="/cart" className="relative p-2 text-foreground hover:text-primary transition">
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && (
