@@ -10,6 +10,7 @@ export type ProductFormValues = {
   slug: string;
   description: string;
   price: number;
+  sale_price: number | null;
   color: string;
   stock: number;
   is_featured: boolean;
@@ -36,6 +37,7 @@ export function ProductForm({
     slug: initial?.slug ?? "",
     description: initial?.description ?? "",
     price: initial?.price ?? 0,
+    sale_price: initial?.sale_price ?? null,
     color: initial?.color ?? "",
     stock: initial?.stock ?? 0,
     is_featured: initial?.is_featured ?? false,
@@ -146,11 +148,24 @@ export function ProductForm({
           <label className="text-sm text-muted-foreground">Description</label>
           <textarea className={input} rows={5} value={values.description} onChange={(e) => update("description", e.target.value)} />
         </div>
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="text-sm text-muted-foreground">Price (Rs) *</label>
             <input type="number" step="0.01" className={input} value={values.price} onChange={(e) => update("price", Number(e.target.value))} />
           </div>
+          <div>
+            <label className="text-sm text-muted-foreground">Sale price (Rs) — optional</label>
+            <input
+              type="number"
+              step="0.01"
+              placeholder="Leave empty if not on sale"
+              className={input}
+              value={values.sale_price ?? ""}
+              onChange={(e) => update("sale_price", e.target.value === "" ? null : Number(e.target.value))}
+            />
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className="text-sm text-muted-foreground">Color</label>
             <input className={input} value={values.color} onChange={(e) => update("color", e.target.value)} />

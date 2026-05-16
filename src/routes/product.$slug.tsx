@@ -102,7 +102,17 @@ function ProductPage() {
             <span className="inline-block rounded-full bg-primary/15 px-3 py-1 text-xs uppercase tracking-wider text-primary mb-4">New Arrival</span>
           )}
           <h1 className="font-serif text-4xl text-foreground">{product.name}</h1>
-          <p className="mt-4 text-3xl text-primary font-light">Rs {Number(product.price).toLocaleString()}</p>
+          {product.sale_price != null && Number(product.sale_price) > 0 && Number(product.sale_price) < Number(product.price) ? (
+            <div className="mt-4 flex items-baseline gap-3">
+              <p className="text-3xl text-primary font-light">Rs {Number(product.sale_price).toLocaleString()}</p>
+              <p className="text-lg text-muted-foreground line-through">Rs {Number(product.price).toLocaleString()}</p>
+              <span className="rounded-full bg-destructive/15 px-2.5 py-1 text-xs font-semibold text-destructive">
+                -{Math.round(((Number(product.price) - Number(product.sale_price)) / Number(product.price)) * 100)}%
+              </span>
+            </div>
+          ) : (
+            <p className="mt-4 text-3xl text-primary font-light">Rs {Number(product.price).toLocaleString()}</p>
+          )}
           {product.color && (
             <p className="mt-3 text-sm text-muted-foreground">Color: <span className="text-foreground">{product.color}</span></p>
           )}
