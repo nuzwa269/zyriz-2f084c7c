@@ -12,6 +12,15 @@ export const Route = createFileRoute("/_authenticated")({
     if (!data.session) {
       throw redirect({ to: "/login" });
     }
+    const { data: roleRow } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", data.session.user.id)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (!roleRow) {
+      throw redirect({ to: "/" });
+    }
   },
   component: AuthLayout,
 });
