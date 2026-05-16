@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { SITE } from "@/lib/config";
 import { ArrowRight, Sparkles, Truck, ShieldCheck } from "lucide-react";
+import heroImg from "@/assets/hero-jewelry.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,31 +48,31 @@ function HomePage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border/40">
-        <div className="absolute inset-0 -z-10 opacity-30">
-          <div className="absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/30 blur-[120px]" />
-        </div>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-24 md:py-36 text-center">
-          <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6">Handcrafted Elegance</p>
-          <h1 className="font-serif text-5xl md:text-7xl leading-tight">
-            <span className="gold-gradient">Turkish Gold</span>
-            <br />
-            <span className="text-foreground">Plated Earrings</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl text-muted-foreground text-lg">
-            Timeless craftsmanship meets modern sophistication — for the woman who wears beauty with intent.
-          </p>
-          <div className="mt-10 flex justify-center gap-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+          <div className="relative overflow-hidden rounded-2xl shadow-[0_20px_60px_-20px_oklch(0.78_0.13_82/0.4)]">
+            <img
+              src={heroImg}
+              alt="Timeless Beauty — Turkish gold-plated earrings collection"
+              className="w-full h-auto object-cover"
+              loading="eager"
+            />
+            <div className="absolute inset-0 flex items-center">
+              <div className="px-6 sm:px-12 md:px-16 max-w-[55%]">
+                <Link
+                  to="/shop"
+                  className="hidden md:inline-flex mt-6 items-center gap-2 rounded-full bg-foreground/90 px-6 py-3 text-xs font-medium text-background hover:bg-foreground transition"
+                >
+                  Shop Collection <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="md:hidden mt-6 flex justify-center gap-3">
             <Link
               to="/shop"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground"
             >
               Shop Collection <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/about"
-              className="inline-flex items-center rounded-full border border-primary/50 px-8 py-3.5 text-sm font-medium text-primary transition hover:bg-primary/10"
-            >
-              Our Story
             </Link>
           </div>
         </div>
@@ -105,8 +106,8 @@ function HomePage() {
           <p className="text-muted-foreground text-center py-12">No products yet. Add some from the admin panel.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {display.map((p) => (
-              <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} image={firstImage(p)} isNew={p.is_new_arrival} />
+            {display.map((p: any) => (
+              <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={firstImage(p)} isNew={p.is_new_arrival} />
             ))}
           </div>
         )}
@@ -122,8 +123,8 @@ function HomePage() {
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {arrivals.map((p) => (
-              <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} image={firstImage(p)} isNew />
+            {arrivals.map((p: any) => (
+              <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={firstImage(p)} isNew />
             ))}
           </div>
         </section>
