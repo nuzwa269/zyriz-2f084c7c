@@ -33,6 +33,17 @@ function HomePage() {
     queryKey: ["home-products"],
     queryFn: fetchHomeProducts,
   });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["home-categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, slug, name, image_path")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
 
   const featured = products.filter((p) => p.is_featured).slice(0, 4);
   const newArrivals = products.filter((p) => p.is_new_arrival).slice(0, 4);
@@ -146,6 +157,43 @@ function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {sellers.map((p: any) => (
               <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={firstImage(p)} isNew={p.is_new_arrival} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {categories.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+          <div className="text-center mb-6 md:mb-10">
+            <p className="text-xs uppercase tracking-[0.3em] text-primary">Browse</p>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl mt-2">Shop by Category</h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            {categories.map((c) => (
+              <Link
+                key={c.id}
+                to="/category/$slug"
+                params={{ slug: c.slug }}
+                className="group relative aspect-square overflow-hidden rounded-lg border border-border/40 bg-card transition hover:shadow-[0_10px_30px_-10px_oklch(0.78_0.13_82/0.35)]"
+              >
+                {c.image_path ? (
+                  <img
+                    src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/product-images/${c.image_path}`}
+                    alt={c.name}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-primary/10" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 text-center">
+                  <h3 className="font-serif text-base sm:text-lg md:text-xl gold-gradient">{c.name}</h3>
+                  <p className="mt-1 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-muted-foreground group-hover:text-primary transition">
+                    Shop now →
+                  </p>
+                </div>
+              </Link>
             ))}
           </div>
         </section>

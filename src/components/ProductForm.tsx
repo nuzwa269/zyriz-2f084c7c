@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
 import { supabase } from "@/integrations/supabase/client";
 import { productImageUrl } from "@/lib/image-url";
@@ -16,6 +17,7 @@ export type ProductFormValues = {
   is_featured: boolean;
   is_new_arrival: boolean;
   is_best_seller: boolean;
+  category_id: string | null;
 };
 
 export function slugify(s: string) {
@@ -44,6 +46,18 @@ export function ProductForm({
     is_featured: initial?.is_featured ?? false,
     is_new_arrival: initial?.is_new_arrival ?? true,
     is_best_seller: initial?.is_best_seller ?? false,
+    category_id: initial?.category_id ?? null,
+  });
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories-list"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
   });
   const [images, setImages] = useState(initialImages);
   const [uploading, setUploading] = useState(false);
@@ -176,6 +190,19 @@ export function ProductForm({
             <label className="text-sm text-muted-foreground">Stock</label>
             <input type="number" className={input} value={values.stock} onChange={(e) => update("stock", Number(e.target.value))} />
           </div>
+        </div>
+        <div>
+          <label className="text-sm text-muted-foreground">Category</label>
+          <select
+            className={input}
+            value={values.category_id ?? ""}
+            onChange={(e) => update("category_id", e.target.value === "" ? null : e.target.value)}
+          >
+            <option value="">— Select category —</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-3">
           <label className="flex items-center gap-2 text-sm">
