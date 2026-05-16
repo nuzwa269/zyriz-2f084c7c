@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import { useServerFn } from "@tanstack/react-start";
+import { getCurrentAdminStatus } from "@/lib/auth.functions";
 
 export function useAuth() {
   const getAdminStatus = useServerFn(getCurrentAdminStatus);
