@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 export type CartItem = {
   productId: string;
@@ -11,17 +11,29 @@ export type CartItem = {
 
 const KEY = "cart-v1";
 const listeners = new Set<() => void>();
+const EMPTY: CartItem[] = [];
+let cache: CartItem[] = EMPTY;
 
-function read(): CartItem[] {
-  if (typeof window === "undefined") return [];
+function load(): CartItem[] {
+  if (typeof window === "undefined") return EMPTY;
   try {
     return JSON.parse(localStorage.getItem(KEY) || "[]");
   } catch {
-    return [];
+    return EMPTY;
   }
 }
 
+// Initialize cache on first import (browser only)
+if (typeof window !== "undefined") {
+  cache = load();
+}
+
+function read(): CartItem[] {
+  return cache;
+}
+
 function write(items: CartItem[]) {
+  cache = items;
   localStorage.setItem(KEY, JSON.stringify(items));
   listeners.forEach((l) => l());
 }
@@ -31,8 +43,12 @@ function subscribe(l: () => void) {
   return () => listeners.delete(l);
 }
 
+function getServerSnapshot() {
+  return EMPTY;
+}
+
 export function useCart() {
-  const items = useSyncExternalStore(subscribe, read, () => [] as CartItem[]);
+  const items = useSyncExternalStore(subscribe, read, getServerSnapshot);
 
   const add = useCallback((item: Omit<CartItem, "quantity">, qty = 1) => {
     const items = read();
