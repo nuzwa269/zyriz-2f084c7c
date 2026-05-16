@@ -15,6 +15,22 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, setQty, remove, total } = useCart();
+  const excludeIds = items.map((i) => i.productId);
+
+  const { data: related = [] } = useQuery({
+    queryKey: ["cart-related", excludeIds.sort().join(",")],
+    queryFn: async () => {
+      let q = supabase
+        .from("products")
+        .select("id, slug, name, price, sale_price, is_new_arrival, product_images(storage_path, display_order)")
+        .order("created_at", { ascending: false })
+        .limit(8);
+      if (excludeIds.length > 0) q = q.not("id", "in", `(${excludeIds.join(",")})`);
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data ?? []).slice(0, 4);
+    },
+  });
 
   return (
     <div className="min-h-screen bg-background">
