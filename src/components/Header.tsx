@@ -1,11 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Menu, X, Sun, Moon } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
+import { useTheme } from "@/hooks/use-theme";
 import { SITE } from "@/lib/config";
 
 export function Header() {
   const { count } = useCart();
+  const { theme, toggle } = useTheme();
   const [open, setOpen] = useState(false);
   const nav = [
     { to: "/", label: "Home" },
@@ -33,6 +35,13 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="p-2 text-foreground hover:text-primary transition"
+          >
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
           <Link to="/cart" className="relative p-2 text-foreground hover:text-primary transition">
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && (

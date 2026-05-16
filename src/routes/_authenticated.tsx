@@ -1,7 +1,8 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { LogOut } from "lucide-react";
+import { useTheme } from "@/hooks/use-theme";
+import { LogOut, Sun, Moon } from "lucide-react";
 import { SITE } from "@/lib/config";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthLayout() {
   const { isAdmin, loading, user } = useAuth();
   const navigate = useNavigate();
+  const { theme, toggle } = useTheme();
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
@@ -49,6 +51,13 @@ function AuthLayout() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-muted-foreground hidden sm:inline">{user?.email}</span>
+            <button
+              onClick={toggle}
+              aria-label="Toggle theme"
+              className="p-1.5 text-muted-foreground hover:text-primary transition"
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
             <button
               onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/login" }); }}
               className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-destructive"
