@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
 async function fetchHomeProducts() {
   const { data, error } = await supabase
     .from("products")
-    .select("id, slug, name, price, sale_price, is_new_arrival, is_featured, product_images(storage_path, display_order)")
+    .select("id, slug, name, price, sale_price, is_new_arrival, is_featured, is_best_seller, product_images(storage_path, display_order)")
     .order("created_at", { ascending: false })
     .limit(12);
   if (error) throw error;
@@ -39,7 +39,8 @@ function HomePage() {
   const display = featured.length ? featured : products.slice(0, 4);
   const arrivals = newArrivals.length ? newArrivals : products.slice(0, 4);
   const usedIds = new Set([...display.map((p) => p.id), ...arrivals.map((p) => p.id)]);
-  const bestSellers = products.filter((p) => !usedIds.has(p.id)).slice(0, 4);
+  const tagged = products.filter((p) => p.is_best_seller && !usedIds.has(p.id)).slice(0, 4);
+  const bestSellers = tagged.length ? tagged : products.filter((p) => !usedIds.has(p.id)).slice(0, 4);
   const sellers = bestSellers.length ? bestSellers : products.slice(0, 4);
 
   const firstImage = (p: typeof products[0]) =>

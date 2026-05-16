@@ -45,6 +45,7 @@ function EditProduct() {
           stock: data.stock,
           is_featured: data.is_featured,
           is_new_arrival: data.is_new_arrival,
+          is_best_seller: data.is_best_seller,
         }}
         initialImages={data.product_images ?? []}
         onSaved={() => navigate({ to: "/admin" })}

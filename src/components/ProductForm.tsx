@@ -15,6 +15,7 @@ export type ProductFormValues = {
   stock: number;
   is_featured: boolean;
   is_new_arrival: boolean;
+  is_best_seller: boolean;
 };
 
 export function slugify(s: string) {
@@ -42,6 +43,7 @@ export function ProductForm({
     stock: initial?.stock ?? 0,
     is_featured: initial?.is_featured ?? false,
     is_new_arrival: initial?.is_new_arrival ?? true,
+    is_best_seller: initial?.is_best_seller ?? false,
   });
   const [images, setImages] = useState(initialImages);
   const [uploading, setUploading] = useState(false);
@@ -175,7 +177,7 @@ export function ProductForm({
             <input type="number" className={input} value={values.stock} onChange={(e) => update("stock", Number(e.target.value))} />
           </div>
         </div>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-x-6 gap-y-3">
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={values.is_featured} onChange={(e) => update("is_featured", e.target.checked)} className="accent-primary" />
             Featured on homepage
@@ -183,6 +185,10 @@ export function ProductForm({
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={values.is_new_arrival} onChange={(e) => update("is_new_arrival", e.target.checked)} className="accent-primary" />
             New arrival
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={values.is_best_seller} onChange={(e) => update("is_best_seller", e.target.checked)} className="accent-primary" />
+            Best seller
           </label>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { productImageUrl } from "@/lib/image-url";
-import { Plus, Pencil, Trash2, Package, Star, Sparkles, AlertTriangle } from "lucide-react";
+import { Plus, Pencil, Trash2, Package, Star, Sparkles, AlertTriangle, Crown } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
@@ -16,7 +16,7 @@ function AdminProducts() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("id, slug, name, price, stock, is_featured, is_new_arrival, product_images(storage_path, display_order)")
+        .select("id, slug, name, price, stock, is_featured, is_new_arrival, is_best_seller, product_images(storage_path, display_order)")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
@@ -27,6 +27,7 @@ function AdminProducts() {
     { label: "Total products", value: products.length, icon: Package },
     { label: "Featured", value: products.filter((p) => p.is_featured).length, icon: Star },
     { label: "New arrivals", value: products.filter((p) => p.is_new_arrival).length, icon: Sparkles },
+    { label: "Best sellers", value: products.filter((p) => p.is_best_seller).length, icon: Crown },
     { label: "Low stock", value: products.filter((p) => Number(p.stock) <= 3).length, icon: AlertTriangle },
   ];
 
@@ -52,7 +53,7 @@ function AdminProducts() {
         </Link>
       </div>
 
-      <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {stats.map((item) => (
           <div key={item.label} className="rounded-lg border border-border bg-card p-5">
             <div className="flex items-center justify-between gap-3">
@@ -100,9 +101,10 @@ function AdminProducts() {
                     <td className="px-4 py-3 text-primary">Rs {Number(p.price).toLocaleString()}</td>
                     <td className="px-4 py-3">{p.stock}</td>
                     <td className="px-4 py-3">
-                      <div className="flex gap-1">
+                      <div className="flex flex-wrap gap-1">
                         {p.is_featured && <span className="rounded bg-primary/15 px-2 py-0.5 text-[10px] text-primary">Featured</span>}
                         {p.is_new_arrival && <span className="rounded bg-primary/15 px-2 py-0.5 text-[10px] text-primary">New</span>}
+                        {p.is_best_seller && <span className="rounded bg-primary/15 px-2 py-0.5 text-[10px] text-primary">Bestseller</span>}
                       </div>
                     </td>
                     <td className="px-4 py-3">
