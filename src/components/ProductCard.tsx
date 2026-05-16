@@ -46,7 +46,7 @@ export function ProductCard({ slug, name, price, salePrice, image, isNew }: Prop
           )}
         </div>
       </div>
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <h3 className="font-serif text-lg text-foreground line-clamp-1">{name}</h3>
         {onSale ? (
           <p className="mt-1 flex items-baseline gap-2">

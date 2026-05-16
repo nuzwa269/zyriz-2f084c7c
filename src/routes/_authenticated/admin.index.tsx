@@ -41,13 +41,13 @@ function AdminProducts() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:py-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <p className="text-sm text-muted-foreground">Admin Dashboard</p>
-          <h1 className="font-serif text-3xl">Product management</h1>
+          <h1 className="font-serif text-2xl sm:text-3xl">Product management</h1>
         </div>
-        <Link to="/admin/products/new" className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+        <Link to="/admin/products/new" className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
           <Plus className="h-4 w-4" /> Add Product
         </Link>
       </div>
@@ -76,8 +76,8 @@ function AdminProducts() {
           <Link to="/admin/products/new" className="text-primary hover:underline">+ Add Product</Link>
         </div>
       ) : (
-        <div className="rounded-lg border border-border bg-card overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-lg border border-border bg-card overflow-x-auto">
+          <table className="w-full text-sm min-w-[640px]">
             <thead className="bg-secondary/50 text-xs uppercase tracking-wider text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 text-left">Image</th>

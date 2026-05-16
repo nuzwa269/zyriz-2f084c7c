@@ -3,9 +3,9 @@ import { SITE } from "@/lib/config";
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-border/60 bg-card/40">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 grid gap-10 md:grid-cols-3">
-        <div>
+    <footer className="mt-16 sm:mt-24 border-t border-border/60 bg-card/40">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:py-12 sm:px-6 grid gap-8 sm:gap-10 sm:grid-cols-2 md:grid-cols-3">
+        <div className="sm:col-span-2 md:col-span-1">
           <h3 className="font-serif text-2xl gold-gradient">{SITE.name}</h3>
           <p className="mt-3 text-sm text-muted-foreground max-w-xs">{SITE.description}</p>
         </div>

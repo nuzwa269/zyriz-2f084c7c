@@ -30,11 +30,11 @@ function CartPage() {
           <div className="grid lg:grid-cols-[1fr_320px] gap-8">
             <div className="space-y-4">
               {items.map((item) => (
-                <div key={item.productId} className="flex gap-4 rounded-lg border border-border/40 bg-card p-4">
-                  <img src={productImageUrl(item.image)} alt={item.name} className="h-24 w-24 rounded-md object-cover" />
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      <Link to="/product/$slug" params={{ slug: item.slug }} className="font-serif text-lg hover:text-primary">{item.name}</Link>
+                <div key={item.productId} className="flex gap-3 sm:gap-4 rounded-lg border border-border/40 bg-card p-3 sm:p-4">
+                  <img src={productImageUrl(item.image)} alt={item.name} className="h-20 w-20 sm:h-24 sm:w-24 rounded-md object-cover shrink-0" />
+                  <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
+                    <div className="min-w-0">
+                      <Link to="/product/$slug" params={{ slug: item.slug }} className="font-serif text-base sm:text-lg hover:text-primary line-clamp-2 block">{item.name}</Link>
                       <p className="text-primary mt-1">Rs {item.price.toLocaleString()}</p>
                     </div>
                     <div className="flex items-center justify-between">
