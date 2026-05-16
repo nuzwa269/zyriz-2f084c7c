@@ -8,13 +8,18 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   const checkAdmin = async (userId: string) => {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    setIsAdmin(!!data);
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+    if (!token) {
+      setIsAdmin(false);
+      return;
+    }
+
+    const response = await fetch("/api/admin-status", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+    setIsAdmin(!!data.isAdmin);
   };
 
   useEffect(() => {
