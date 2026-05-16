@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthLayout() {
   const { isAdmin, loading, user } = useAuth();
   const navigate = useNavigate();
+  const { theme, toggle } = useTheme();
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
