@@ -48,7 +48,7 @@ function HomePage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border/40">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-12">
           <div className="relative overflow-hidden rounded-2xl shadow-[0_20px_60px_-20px_oklch(0.78_0.13_82/0.4)]">
             <img
               src={heroImg}
@@ -56,21 +56,21 @@ function HomePage() {
               className="w-full h-auto object-cover"
               loading="eager"
             />
-            <div className="absolute inset-0 flex items-center">
-              <div className="px-6 sm:px-12 md:px-16 max-w-[55%]">
+            <div className="absolute inset-0 hidden md:flex items-center">
+              <div className="px-12 md:px-16 max-w-[55%]">
                 <Link
                   to="/shop"
-                  className="hidden md:inline-flex mt-6 items-center gap-2 rounded-full bg-foreground/90 px-6 py-3 text-xs font-medium text-background hover:bg-foreground transition"
+                  className="inline-flex mt-6 items-center gap-2 rounded-full bg-foreground/90 px-6 py-3 text-xs font-medium text-background hover:bg-foreground transition"
                 >
                   Shop Collection <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </div>
           </div>
-          <div className="md:hidden mt-6 flex justify-center gap-3">
+          <div className="md:hidden mt-5 flex justify-center">
             <Link
               to="/shop"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground w-full sm:w-auto justify-center"
             >
               Shop Collection <ArrowRight className="h-4 w-4" />
             </Link>
@@ -79,7 +79,7 @@ function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-16 grid gap-8 md:grid-cols-3">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-10 md:py-16 grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 md:grid-cols-3">
         {[
           { icon: Sparkles, title: "Premium Quality", text: "Genuine gold plating on Turkish brass." },
           { icon: Truck, title: "Fast Delivery", text: "Nationwide shipping across Pakistan." },
@@ -94,18 +94,18 @@ function HomePage() {
       </section>
 
       {/* Featured */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-        <div className="flex items-end justify-between mb-8">
-          <div>
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+        <div className="flex items-end justify-between gap-3 mb-6 md:mb-8">
+          <div className="min-w-0">
             <p className="text-xs uppercase tracking-[0.3em] text-primary">Featured</p>
-            <h2 className="font-serif text-4xl mt-2">Signature Pieces</h2>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl mt-2">Signature Pieces</h2>
           </div>
-          <Link to="/shop" className="text-sm text-primary hover:underline">View all →</Link>
+          <Link to="/shop" className="text-sm text-primary hover:underline shrink-0">View all →</Link>
         </div>
         {display.length === 0 ? (
           <p className="text-muted-foreground text-center py-12">No products yet. Add some from the admin panel.</p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {display.map((p: any) => (
               <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={firstImage(p)} isNew={p.is_new_arrival} />
             ))}
@@ -115,14 +115,14 @@ function HomePage() {
 
       {/* New arrivals */}
       {arrivals.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-          <div className="flex items-end justify-between mb-8">
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 py-8 md:py-12">
+          <div className="flex items-end justify-between mb-6 md:mb-8">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-primary">Just In</p>
-              <h2 className="font-serif text-4xl mt-2">New Arrivals</h2>
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl mt-2">New Arrivals</h2>
             </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {arrivals.map((p: any) => (
               <ProductCard key={p.id} slug={p.slug} name={p.name} price={Number(p.price)} salePrice={p.sale_price != null ? Number(p.sale_price) : null} image={firstImage(p)} isNew />
             ))}

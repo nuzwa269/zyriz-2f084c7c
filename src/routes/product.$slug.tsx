@@ -73,7 +73,7 @@ function ProductPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <article className="mx-auto max-w-6xl px-4 sm:px-6 py-12 grid md:grid-cols-2 gap-12">
+      <article className="mx-auto max-w-6xl px-4 sm:px-6 py-8 md:py-12 grid md:grid-cols-2 gap-6 md:gap-12">
         <div>
           <div className="aspect-square overflow-hidden rounded-lg border border-border/40 bg-secondary">
             {images[activeImg] ? (
@@ -101,7 +101,7 @@ function ProductPage() {
           {product.is_new_arrival && (
             <span className="inline-block rounded-full bg-primary/15 px-3 py-1 text-xs uppercase tracking-wider text-primary mb-4">New Arrival</span>
           )}
-          <h1 className="font-serif text-4xl text-foreground">{product.name}</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl text-foreground break-words">{product.name}</h1>
           {product.sale_price != null && Number(product.sale_price) > 0 && Number(product.sale_price) < Number(product.price) ? (
             <div className="mt-4 flex items-baseline gap-3">
               <p className="text-3xl text-primary font-light">Rs {Number(product.sale_price).toLocaleString()}</p>
@@ -117,13 +117,13 @@ function ProductPage() {
             <p className="mt-3 text-sm text-muted-foreground">Color: <span className="text-foreground">{product.color}</span></p>
           )}
           {product.description && (
-            <div className="mt-6 prose prose-invert max-w-none">
+            <div className="mt-6 max-w-none">
               <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{product.description}</p>
             </div>
           )}
           <div className="mt-8 flex items-center gap-3 text-sm">
             {product.stock > 0 ? (
-              <span className="inline-flex items-center gap-1 text-green-400"><Check className="h-4 w-4" /> In stock ({product.stock} available)</span>
+              <span className="inline-flex items-center gap-1 text-[oklch(0.65_0.18_145)]"><Check className="h-4 w-4" /> In stock ({product.stock} available)</span>
             ) : (
               <span className="text-destructive">Out of stock</span>
             )}

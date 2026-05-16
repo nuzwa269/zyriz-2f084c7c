@@ -112,12 +112,19 @@
 
 @layer base {
   * { border-color: var(--color-border); }
+  html, body { overflow-x: hidden; max-width: 100%; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
   }
   h1, h2, h3, h4 { font-family: var(--font-serif); letter-spacing: -0.01em; }
+  img, video { max-width: 100%; height: auto; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  @media (max-width: 640px) {
+    button, [role="button"], a.btn { min-height: 40px; }
+  }
 }
 
 .gold-gradient {

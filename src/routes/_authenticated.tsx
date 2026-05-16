@@ -42,27 +42,28 @@ function AuthLayout() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-6">
-            <Link to="/admin" className="font-serif text-xl gold-gradient">{SITE.name} Admin</Link>
-            <Link to="/admin" className="text-sm text-muted-foreground hover:text-primary">Products</Link>
-            <Link to="/" className="text-sm text-muted-foreground hover:text-primary">View Site</Link>
+      <header className="border-b border-border bg-card sticky top-0 z-40">
+        <div className="mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-y-2 px-3 sm:px-4 py-3">
+          <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
+            <Link to="/admin" className="font-serif text-lg sm:text-xl gold-gradient truncate">{SITE.name} Admin</Link>
+            <Link to="/admin" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Products</Link>
+            <Link to="/" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">View Site</Link>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground hidden sm:inline">{user?.email}</span>
+          <div className="flex items-center gap-1 sm:gap-3 shrink-0">
+            <span className="text-xs text-muted-foreground hidden lg:inline truncate max-w-[180px]">{user?.email}</span>
             <button
               onClick={toggle}
               aria-label="Toggle theme"
-              className="p-1.5 text-muted-foreground hover:text-primary transition"
+              className="p-2 text-muted-foreground hover:text-primary transition"
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
             <button
               onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/login" }); }}
-              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-destructive"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-destructive px-2 py-2"
+              aria-label="Sign out"
             >
-              <LogOut className="h-4 w-4" /> Sign out
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Sign out</span>
             </button>
           </div>
         </div>
