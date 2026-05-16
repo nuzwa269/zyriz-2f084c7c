@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
 import { supabase } from "@/integrations/supabase/client";
 import { productImageUrl } from "@/lib/image-url";
@@ -16,6 +17,7 @@ export type ProductFormValues = {
   is_featured: boolean;
   is_new_arrival: boolean;
   is_best_seller: boolean;
+  category_id: string | null;
 };
 
 export function slugify(s: string) {
