@@ -18,9 +18,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="font-serif text-2xl font-semibold gold-gradient">{SITE.name}</span>
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-3 sm:px-6 gap-2">
+        <Link to="/" className="flex items-center gap-2 min-w-0">
+          <span className="font-serif text-xl sm:text-2xl font-semibold gold-gradient truncate">{SITE.name}</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {nav.map((n) => (
@@ -34,7 +34,7 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3 shrink-0">
           <button
             onClick={toggle}
             aria-label="Toggle theme"
