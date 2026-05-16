@@ -5,11 +5,15 @@ type Props = {
   slug: string;
   name: string;
   price: number;
+  salePrice?: number | null;
   image?: string | null;
   isNew?: boolean;
 };
 
-export function ProductCard({ slug, name, price, image, isNew }: Props) {
+export function ProductCard({ slug, name, price, salePrice, image, isNew }: Props) {
+  const onSale = salePrice != null && salePrice > 0 && salePrice < price;
+  const discount = onSale ? Math.round(((price - (salePrice as number)) / price) * 100) : 0;
+
   return (
     <Link
       to="/product/$slug"
@@ -29,15 +33,29 @@ export function ProductCard({ slug, name, price, image, isNew }: Props) {
             No image
           </div>
         )}
-        {isNew && (
-          <span className="absolute left-3 top-3 rounded-full bg-primary/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
-            New
-          </span>
-        )}
+        <div className="absolute left-3 top-3 flex flex-col gap-1.5">
+          {isNew && (
+            <span className="rounded-full bg-primary/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
+              New
+            </span>
+          )}
+          {onSale && (
+            <span className="rounded-full bg-destructive/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+              -{discount}%
+            </span>
+          )}
+        </div>
       </div>
       <div className="p-4">
         <h3 className="font-serif text-lg text-foreground line-clamp-1">{name}</h3>
-        <p className="mt-1 text-primary font-medium">Rs {price.toLocaleString()}</p>
+        {onSale ? (
+          <p className="mt-1 flex items-baseline gap-2">
+            <span className="text-primary font-medium">Rs {(salePrice as number).toLocaleString()}</span>
+            <span className="text-xs text-muted-foreground line-through">Rs {price.toLocaleString()}</span>
+          </p>
+        ) : (
+          <p className="mt-1 text-primary font-medium">Rs {price.toLocaleString()}</p>
+        )}
       </div>
     </Link>
   );

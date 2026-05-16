@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
 async function fetchHomeProducts() {
   const { data, error } = await supabase
     .from("products")
-    .select("id, slug, name, price, is_new_arrival, is_featured, product_images(storage_path, display_order)")
+    .select("id, slug, name, price, sale_price, is_new_arrival, is_featured, product_images(storage_path, display_order)")
     .order("created_at", { ascending: false })
     .limit(12);
   if (error) throw error;
