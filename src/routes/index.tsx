@@ -199,6 +199,42 @@ function HomePage() {
         </section>
       )}
 
+      {/* Happy Customers / Testimonials */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-10 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <p className="text-xs uppercase tracking-[0.3em] text-primary">Testimonials</p>
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl mt-2">Happy Customers</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Real reviews from our valued buyers</p>
+        </div>
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { name: "Ayesha K.", city: "Lahore", text: "Quality bohot achi hai, gold plating asli lag rahi hai. Packaging bhi premium thi. Highly recommended!" },
+            { name: "Sana M.", city: "Karachi", text: "Earrings exactly waisi hi mili jaisi tasveer mein thi. Delivery bhi fast thi. Zaroor dobara order karungi." },
+            { name: "Hira R.", city: "Islamabad", text: "Maine apni shaadi ke liye jewellery set liya, sab ne tareef ki! Shukriya Zyriz." },
+            { name: "Fatima A.", city: "Rawalpindi", text: "WhatsApp pe order karna bohot easy tha. Staff ne acha guide kiya aur product bilkul perfect tha." },
+            { name: "Mehwish T.", city: "Faisalabad", text: "Bracelet ki finishing kamaal ki hai. Price ke hisab se quality bohot acchi mili." },
+            { name: "Zoya S.", city: "Multan", text: "Best gift for my sister! Locket bohot khoobsurat hai aur long-lasting bhi." },
+          ].map((r) => (
+            <div
+              key={r.name}
+              className="relative rounded-xl border border-border/40 bg-card p-6 shadow-sm transition hover:shadow-[0_10px_30px_-10px_oklch(0.78_0.13_82/0.35)]"
+            >
+              <Quote className="absolute top-4 right-4 h-6 w-6 text-primary/30" />
+              <div className="flex gap-0.5 mb-3">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                ))}
+              </div>
+              <p className="text-sm text-foreground/85 leading-relaxed">"{r.text}"</p>
+              <div className="mt-4 pt-4 border-t border-border/40">
+                <p className="font-serif text-base">{r.name}</p>
+                <p className="text-xs text-muted-foreground">{r.city}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
