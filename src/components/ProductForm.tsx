@@ -189,7 +189,21 @@ export function ProductForm({
           <div>
             <label className="text-sm text-muted-foreground">Stock</label>
             <input type="number" className={input} value={values.stock} onChange={(e) => update("stock", Number(e.target.value))} />
-          </div>
+        </div>
+        <div>
+          <label className="text-sm text-muted-foreground">Category</label>
+          <select
+            className={input}
+            value={values.category_id ?? ""}
+            onChange={(e) => update("category_id", e.target.value === "" ? null : e.target.value)}
+          >
+            <option value="">— Select category —</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-wrap gap-x-6 gap-y-3" style={{ display: "none" }}></div>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-3">
           <label className="flex items-center gap-2 text-sm">
