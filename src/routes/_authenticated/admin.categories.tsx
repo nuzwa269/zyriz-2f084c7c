@@ -155,11 +155,11 @@ function CategoryFormModal({
     setUploading(true);
     try {
       const compressed = await imageCompression(file, {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1600,
+        maxSizeMB: 3,
+        maxWidthOrHeight: 2400,
         useWebWorker: true,
         fileType: "image/webp",
-        initialQuality: 0.85,
+        initialQuality: 0.95,
       });
       const path = `categories/${crypto.randomUUID()}.webp`;
       const { error } = await supabase.storage.from("product-images").upload(path, compressed, {
