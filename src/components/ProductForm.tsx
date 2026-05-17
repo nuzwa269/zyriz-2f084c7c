@@ -74,11 +74,11 @@ export function ProductForm({
       const baseFolder = productId ? `products/${productId}` : `products/temp-${crypto.randomUUID()}`;
       for (const file of Array.from(files)) {
         const compressed = await imageCompression(file, {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1600,
+          maxSizeMB: 3,
+          maxWidthOrHeight: 2400,
           useWebWorker: true,
           fileType: "image/webp",
-          initialQuality: 0.85,
+          initialQuality: 0.95,
         });
         const path = `${baseFolder}/${crypto.randomUUID()}.webp`;
         const { error: upErr } = await supabase.storage.from("product-images").upload(path, compressed, {
@@ -236,7 +236,7 @@ export function ProductForm({
             <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleUpload(e.target.files)} disabled={uploading} />
           </label>
         </div>
-        <p className="text-xs text-muted-foreground mt-3">Images are auto-compressed to WebP (max 1600px, ~85% quality) for fast loading.</p>
+        <p className="text-xs text-muted-foreground mt-3">Images are converted to WebP (max 2400px, ~95% quality) for high quality with reasonable file size.</p>
       </div>
 
       <div className="flex justify-end gap-3">
