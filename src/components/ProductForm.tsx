@@ -74,11 +74,11 @@ export function ProductForm({
       const baseFolder = productId ? `products/${productId}` : `products/temp-${crypto.randomUUID()}`;
       for (const file of Array.from(files)) {
         const compressed = await imageCompression(file, {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1600,
+          maxSizeMB: 3,
+          maxWidthOrHeight: 2400,
           useWebWorker: true,
           fileType: "image/webp",
-          initialQuality: 0.85,
+          initialQuality: 0.95,
         });
         const path = `${baseFolder}/${crypto.randomUUID()}.webp`;
         const { error: upErr } = await supabase.storage.from("product-images").upload(path, compressed, {
