@@ -23,7 +23,7 @@ async function fetchHomeProducts() {
     .from("products")
     .select("id, slug, name, price, sale_price, is_new_arrival, is_featured, is_best_seller, product_images(storage_path, display_order)")
     .order("created_at", { ascending: false })
-    .limit(12);
+    .limit(60);
   if (error) throw error;
   return data ?? [];
 }
@@ -45,14 +45,14 @@ function HomePage() {
     },
   });
 
-  const featured = products.filter((p) => p.is_featured).slice(0, 4);
-  const newArrivals = products.filter((p) => p.is_new_arrival).slice(0, 4);
-  const display = featured.length ? featured : products.slice(0, 4);
-  const arrivals = newArrivals.length ? newArrivals : products.slice(0, 4);
+  const featured = products.filter((p) => p.is_featured).slice(0, 10);
+  const newArrivals = products.filter((p) => p.is_new_arrival).slice(0, 10);
+  const display = featured.length ? featured : products.slice(0, 10);
+  const arrivals = newArrivals.length ? newArrivals : products.slice(0, 10);
   const usedIds = new Set([...display.map((p) => p.id), ...arrivals.map((p) => p.id)]);
-  const tagged = products.filter((p) => p.is_best_seller && !usedIds.has(p.id)).slice(0, 4);
-  const bestSellers = tagged.length ? tagged : products.filter((p) => !usedIds.has(p.id)).slice(0, 4);
-  const sellers = bestSellers.length ? bestSellers : products.slice(0, 4);
+  const tagged = products.filter((p) => p.is_best_seller && !usedIds.has(p.id)).slice(0, 10);
+  const bestSellers = tagged.length ? tagged : products.filter((p) => !usedIds.has(p.id)).slice(0, 10);
+  const sellers = bestSellers.length ? bestSellers : products.slice(0, 10);
 
   const firstImage = (p: typeof products[0]) =>
     p.product_images?.sort((a, b) => a.display_order - b.display_order)[0]?.storage_path;
