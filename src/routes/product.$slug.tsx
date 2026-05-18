@@ -55,11 +55,14 @@ function ProductPage() {
   const images = (product.product_images ?? []).sort((a, b) => a.display_order - b.display_order);
 
   const handleAdd = () => {
+    const original = Number(product.price);
+    const sale = product.sale_price != null ? Number(product.sale_price) : null;
+    const effective = sale != null && sale > 0 && sale < original ? sale : original;
     add({
       productId: product.id,
       slug: product.slug,
       name: product.name,
-      price: Number(product.price),
+      price: effective,
       image: images[0]?.storage_path ?? "",
     });
     toast.success("Added to cart");
