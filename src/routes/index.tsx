@@ -18,21 +18,33 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-async function fetchHomeProducts() {
-  const { data, error } = await supabase
+const PRODUCT_SELECT = "id, slug, name, price, sale_price, is_new_arrival, is_featured, is_best_seller, product_images(storage_path, display_order)";
+
+async function fetchSection(filter: "featured" | "new" | "best") {
+  const column = filter === "featured" ? "is_featured" : filter === "new" ? "is_new_arrival" : "is_best_seller";
+  const { data: tagged, error } = await supabase
     .from("products")
-    .select("id, slug, name, price, sale_price, is_new_arrival, is_featured, is_best_seller, product_images(storage_path, display_order)")
+    .select(PRODUCT_SELECT)
+    .eq(column, true)
     .order("created_at", { ascending: false })
-    .limit(60);
+    .limit(10);
   if (error) throw error;
-  return data ?? [];
+  if ((tagged?.length ?? 0) >= 10) return tagged ?? [];
+  const { data: latest, error: e2 } = await supabase
+    .from("products")
+    .select(PRODUCT_SELECT)
+    .order("created_at", { ascending: false })
+    .limit(20);
+  if (e2) throw e2;
+  const seen = new Set((tagged ?? []).map((p: any) => p.id));
+  const filler = (latest ?? []).filter((p: any) => !seen.has(p.id));
+  return [...(tagged ?? []), ...filler].slice(0, 10);
 }
 
 function HomePage() {
-  const { data: products = [] } = useQuery({
-    queryKey: ["home-products"],
-    queryFn: fetchHomeProducts,
-  });
+  const { data: display = [] } = useQuery({ queryKey: ["home-featured"], queryFn: () => fetchSection("featured") });
+  const { data: arrivals = [] } = useQuery({ queryKey: ["home-new"], queryFn: () => fetchSection("new") });
+  const { data: sellers = [] } = useQuery({ queryKey: ["home-best"], queryFn: () => fetchSection("best") });
   const { data: categories = [] } = useQuery({
     queryKey: ["home-categories"],
     queryFn: async () => {
@@ -45,17 +57,8 @@ function HomePage() {
     },
   });
 
-  const featured = products.filter((p) => p.is_featured).slice(0, 10);
-  const newArrivals = products.filter((p) => p.is_new_arrival).slice(0, 10);
-  const display = featured.length ? featured : products.slice(0, 10);
-  const arrivals = newArrivals.length ? newArrivals : products.slice(0, 10);
-  const usedIds = new Set([...display.map((p) => p.id), ...arrivals.map((p) => p.id)]);
-  const tagged = products.filter((p) => p.is_best_seller && !usedIds.has(p.id)).slice(0, 10);
-  const bestSellers = tagged.length ? tagged : products.filter((p) => !usedIds.has(p.id)).slice(0, 10);
-  const sellers = bestSellers.length ? bestSellers : products.slice(0, 10);
-
-  const firstImage = (p: typeof products[0]) =>
-    p.product_images?.sort((a, b) => a.display_order - b.display_order)[0]?.storage_path;
+  const firstImage = (p: any) =>
+    p.product_images?.sort((a: any, b: any) => a.display_order - b.display_order)[0]?.storage_path;
 
   return (
     <div className="min-h-screen bg-background">
