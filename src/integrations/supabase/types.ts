@@ -47,6 +47,138 @@ export type Database = {
         }
         Relationships: []
       }
+      footer_links: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_external: boolean
+          is_published: boolean
+          label: string
+          section: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_external?: boolean
+          is_published?: boolean
+          label: string
+          section?: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_external?: boolean
+          is_published?: boolean
+          label?: string
+          section?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      home_features: {
+        Row: {
+          created_at: string
+          display_order: number
+          icon: string
+          id: string
+          is_published: boolean
+          text: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          icon?: string
+          id?: string
+          is_published?: boolean
+          text: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          icon?: string
+          id?: string
+          is_published?: boolean
+          text?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      home_sections: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_published: boolean
+          kind: string
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          kind: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          kind?: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      home_videos: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_published: boolean
+          title: string | null
+          updated_at: string
+          youtube_url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          title?: string | null
+          updated_at?: string
+          youtube_url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          title?: string | null
+          updated_at?: string
+          youtube_url?: string
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           created_at: string
@@ -137,6 +269,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          customer_name: string
+          display_order: number
+          id: string
+          image_path: string | null
+          is_published: boolean
+          rating: number
+          review_text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          display_order?: number
+          id?: string
+          image_path?: string | null
+          is_published?: boolean
+          rating?: number
+          review_text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          display_order?: number
+          id?: string
+          image_path?: string | null
+          is_published?: boolean
+          rating?: number
+          review_text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      social_links: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_published: boolean
+          platform: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          platform: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_published?: boolean
+          platform?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

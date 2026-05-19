@@ -20,6 +20,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminVideosRouteImport } from './routes/_authenticated/admin.videos'
+import { Route as AuthenticatedAdminSocialRouteImport } from './routes/_authenticated/admin.social'
+import { Route as AuthenticatedAdminSectionsRouteImport } from './routes/_authenticated/admin.sections'
+import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
+import { Route as AuthenticatedAdminHeroRouteImport } from './routes/_authenticated/admin.hero'
+import { Route as AuthenticatedAdminFooterRouteImport } from './routes/_authenticated/admin.footer'
+import { Route as AuthenticatedAdminFeaturesRouteImport } from './routes/_authenticated/admin.features'
 import { Route as AuthenticatedAdminCategoriesRouteImport } from './routes/_authenticated/admin.categories'
 import { Route as AuthenticatedAdminProductsNewRouteImport } from './routes/_authenticated/admin.products.new'
 import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
@@ -78,6 +85,47 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminVideosRoute =
+  AuthenticatedAdminVideosRouteImport.update({
+    id: '/admin/videos',
+    path: '/admin/videos',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSocialRoute =
+  AuthenticatedAdminSocialRouteImport.update({
+    id: '/admin/social',
+    path: '/admin/social',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminSectionsRoute =
+  AuthenticatedAdminSectionsRouteImport.update({
+    id: '/admin/sections',
+    path: '/admin/sections',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminReviewsRoute =
+  AuthenticatedAdminReviewsRouteImport.update({
+    id: '/admin/reviews',
+    path: '/admin/reviews',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminHeroRoute = AuthenticatedAdminHeroRouteImport.update({
+  id: '/admin/hero',
+  path: '/admin/hero',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAdminFooterRoute =
+  AuthenticatedAdminFooterRouteImport.update({
+    id: '/admin/footer',
+    path: '/admin/footer',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminFeaturesRoute =
+  AuthenticatedAdminFeaturesRouteImport.update({
+    id: '/admin/features',
+    path: '/admin/features',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminCategoriesRoute =
   AuthenticatedAdminCategoriesRouteImport.update({
     id: '/admin/categories',
@@ -108,6 +156,13 @@ export interface FileRoutesByFullPath {
   '/category/$slug': typeof CategorySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/admin/features': typeof AuthenticatedAdminFeaturesRoute
+  '/admin/footer': typeof AuthenticatedAdminFooterRoute
+  '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/sections': typeof AuthenticatedAdminSectionsRoute
+  '/admin/social': typeof AuthenticatedAdminSocialRoute
+  '/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
@@ -123,6 +178,13 @@ export interface FileRoutesByTo {
   '/category/$slug': typeof CategorySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/admin/features': typeof AuthenticatedAdminFeaturesRoute
+  '/admin/footer': typeof AuthenticatedAdminFooterRoute
+  '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/admin/sections': typeof AuthenticatedAdminSectionsRoute
+  '/admin/social': typeof AuthenticatedAdminSocialRoute
+  '/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
@@ -140,6 +202,13 @@ export interface FileRoutesById {
   '/category/$slug': typeof CategorySlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/_authenticated/admin/categories': typeof AuthenticatedAdminCategoriesRoute
+  '/_authenticated/admin/features': typeof AuthenticatedAdminFeaturesRoute
+  '/_authenticated/admin/footer': typeof AuthenticatedAdminFooterRoute
+  '/_authenticated/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
+  '/_authenticated/admin/sections': typeof AuthenticatedAdminSectionsRoute
+  '/_authenticated/admin/social': typeof AuthenticatedAdminSocialRoute
+  '/_authenticated/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/_authenticated/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
@@ -157,6 +226,13 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/product/$slug'
     | '/admin/categories'
+    | '/admin/features'
+    | '/admin/footer'
+    | '/admin/hero'
+    | '/admin/reviews'
+    | '/admin/sections'
+    | '/admin/social'
+    | '/admin/videos'
     | '/admin/'
     | '/admin/products/$id'
     | '/admin/products/new'
@@ -172,6 +248,13 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/product/$slug'
     | '/admin/categories'
+    | '/admin/features'
+    | '/admin/footer'
+    | '/admin/hero'
+    | '/admin/reviews'
+    | '/admin/sections'
+    | '/admin/social'
+    | '/admin/videos'
     | '/admin'
     | '/admin/products/$id'
     | '/admin/products/new'
@@ -188,6 +271,13 @@ export interface FileRouteTypes {
     | '/category/$slug'
     | '/product/$slug'
     | '/_authenticated/admin/categories'
+    | '/_authenticated/admin/features'
+    | '/_authenticated/admin/footer'
+    | '/_authenticated/admin/hero'
+    | '/_authenticated/admin/reviews'
+    | '/_authenticated/admin/sections'
+    | '/_authenticated/admin/social'
+    | '/_authenticated/admin/videos'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/products/$id'
     | '/_authenticated/admin/products/new'
@@ -285,6 +375,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/videos': {
+      id: '/_authenticated/admin/videos'
+      path: '/admin/videos'
+      fullPath: '/admin/videos'
+      preLoaderRoute: typeof AuthenticatedAdminVideosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/social': {
+      id: '/_authenticated/admin/social'
+      path: '/admin/social'
+      fullPath: '/admin/social'
+      preLoaderRoute: typeof AuthenticatedAdminSocialRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/sections': {
+      id: '/_authenticated/admin/sections'
+      path: '/admin/sections'
+      fullPath: '/admin/sections'
+      preLoaderRoute: typeof AuthenticatedAdminSectionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/reviews': {
+      id: '/_authenticated/admin/reviews'
+      path: '/admin/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/hero': {
+      id: '/_authenticated/admin/hero'
+      path: '/admin/hero'
+      fullPath: '/admin/hero'
+      preLoaderRoute: typeof AuthenticatedAdminHeroRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/footer': {
+      id: '/_authenticated/admin/footer'
+      path: '/admin/footer'
+      fullPath: '/admin/footer'
+      preLoaderRoute: typeof AuthenticatedAdminFooterRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/features': {
+      id: '/_authenticated/admin/features'
+      path: '/admin/features'
+      fullPath: '/admin/features'
+      preLoaderRoute: typeof AuthenticatedAdminFeaturesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/categories': {
       id: '/_authenticated/admin/categories'
       path: '/admin/categories'
@@ -311,6 +450,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminCategoriesRoute: typeof AuthenticatedAdminCategoriesRoute
+  AuthenticatedAdminFeaturesRoute: typeof AuthenticatedAdminFeaturesRoute
+  AuthenticatedAdminFooterRoute: typeof AuthenticatedAdminFooterRoute
+  AuthenticatedAdminHeroRoute: typeof AuthenticatedAdminHeroRoute
+  AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
+  AuthenticatedAdminSectionsRoute: typeof AuthenticatedAdminSectionsRoute
+  AuthenticatedAdminSocialRoute: typeof AuthenticatedAdminSocialRoute
+  AuthenticatedAdminVideosRoute: typeof AuthenticatedAdminVideosRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminProductsIdRoute: typeof AuthenticatedAdminProductsIdRoute
   AuthenticatedAdminProductsNewRoute: typeof AuthenticatedAdminProductsNewRoute
@@ -318,6 +464,13 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminCategoriesRoute: AuthenticatedAdminCategoriesRoute,
+  AuthenticatedAdminFeaturesRoute: AuthenticatedAdminFeaturesRoute,
+  AuthenticatedAdminFooterRoute: AuthenticatedAdminFooterRoute,
+  AuthenticatedAdminHeroRoute: AuthenticatedAdminHeroRoute,
+  AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
+  AuthenticatedAdminSectionsRoute: AuthenticatedAdminSectionsRoute,
+  AuthenticatedAdminSocialRoute: AuthenticatedAdminSocialRoute,
+  AuthenticatedAdminVideosRoute: AuthenticatedAdminVideosRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminProductsIdRoute: AuthenticatedAdminProductsIdRoute,
   AuthenticatedAdminProductsNewRoute: AuthenticatedAdminProductsNewRoute,

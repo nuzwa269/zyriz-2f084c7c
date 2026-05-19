@@ -57,6 +57,13 @@ function AuthLayout() {
             <Link to="/admin" className="font-serif text-lg sm:text-xl gold-gradient truncate">{SITE.name} Admin</Link>
             <Link to="/admin" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Products</Link>
             <Link to="/admin/categories" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Categories</Link>
+            <Link to="/admin/reviews" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Reviews</Link>
+            <Link to="/admin/features" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Features</Link>
+            <Link to="/admin/hero" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Hero</Link>
+            <Link to="/admin/footer" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Footer</Link>
+            <Link to="/admin/sections" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Sections</Link>
+            <Link to="/admin/videos" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Videos</Link>
+            <Link to="/admin/social" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">Social</Link>
             <Link to="/" className="hidden sm:inline text-sm text-muted-foreground hover:text-primary">View Site</Link>
           </div>
           <div className="flex items-center gap-1 sm:gap-3 shrink-0">
