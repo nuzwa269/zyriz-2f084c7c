@@ -44,6 +44,8 @@ function AuthLayout() {
   const { isAdmin, loading, user } = useAuth();
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const currentPath = useRouterState({ select: (s) => s.location.pathname });
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
