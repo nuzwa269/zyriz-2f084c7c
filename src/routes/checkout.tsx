@@ -8,7 +8,9 @@ import { z } from "zod";
 import { SITE } from "@/lib/config";
 import { buildOrderMessage, whatsappUrl, type CheckoutDetails } from "@/lib/whatsapp";
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — Zyriz" }] }),
