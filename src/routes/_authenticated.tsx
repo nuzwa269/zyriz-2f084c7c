@@ -1,9 +1,24 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
-import { LogOut, Sun, Moon } from "lucide-react";
+import { LogOut, Sun, Moon, Menu, X } from "lucide-react";
 import { SITE } from "@/lib/config";
+
+const ADMIN_NAV = [
+  { to: "/admin", label: "Products" },
+  { to: "/admin/orders", label: "Orders" },
+  { to: "/admin/categories", label: "Categories" },
+  { to: "/admin/reviews", label: "Reviews" },
+  { to: "/admin/features", label: "Features" },
+  { to: "/admin/hero", label: "Hero" },
+  { to: "/admin/footer", label: "Footer" },
+  { to: "/admin/sections", label: "Sections" },
+  { to: "/admin/videos", label: "Videos" },
+  { to: "/admin/social", label: "Social" },
+  { to: "/", label: "View Site" },
+] as const;
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async () => {
