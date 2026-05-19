@@ -179,6 +179,63 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          address: string
+          city: string
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id: string
+          items: Json
+          note: string | null
+          payment_method: string
+          postal_code: string | null
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+          whatsapp_opened: boolean
+        }
+        Insert: {
+          address: string
+          city: string
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id?: string
+          items?: Json
+          note?: string | null
+          payment_method: string
+          postal_code?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          whatsapp_opened?: boolean
+        }
+        Update: {
+          address?: string
+          city?: string
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          id?: string
+          items?: Json
+          note?: string | null
+          payment_method?: string
+          postal_code?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          whatsapp_opened?: boolean
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           created_at: string

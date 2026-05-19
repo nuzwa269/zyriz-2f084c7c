@@ -8,7 +8,9 @@ import { z } from "zod";
 import { SITE } from "@/lib/config";
 import { buildOrderMessage, whatsappUrl, type CheckoutDetails } from "@/lib/whatsapp";
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — Zyriz" }] }),
@@ -30,6 +32,7 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const { items, total, clear } = useCart();
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [submittedMethod, setSubmittedMethod] = useState<CheckoutDetails["paymentMethod"]>("JazzCash");
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<CheckoutDetails>({
@@ -51,12 +54,42 @@ function CheckoutPage() {
     );
   }
 
-  const onSubmit = (data: CheckoutDetails) => {
-    const msg = buildOrderMessage(items, total, data);
-    setSubmittedMethod(data.paymentMethod);
-    window.open(whatsappUrl(msg), "_blank");
-    clear();
-    setSent(true);
+  const onSubmit = async (data: CheckoutDetails) => {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from("orders").insert({
+        customer_name: data.name,
+        customer_email: data.email,
+        customer_phone: data.phone,
+        address: data.address,
+        city: data.city,
+        postal_code: data.postalCode || null,
+        note: data.note || null,
+        items: items.map((i) => ({
+          productId: i.productId,
+          slug: i.slug,
+          name: i.name,
+          price: i.price,
+          quantity: i.quantity,
+          image: i.image,
+        })),
+        subtotal: total,
+        total,
+        payment_method: data.paymentMethod,
+        whatsapp_opened: true,
+      });
+      if (error) throw error;
+      const msg = buildOrderMessage(items, total, data);
+      setSubmittedMethod(data.paymentMethod);
+      window.open(whatsappUrl(msg), "_blank");
+      clear();
+      setSent(true);
+    } catch (e: any) {
+      toast.error("Could not save your order. Please try again.", { description: e?.message });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (sent) {
@@ -181,9 +214,11 @@ function CheckoutPage() {
             </div>
             <button
               type="submit"
-              className="flex items-center justify-center gap-2 rounded-full bg-[oklch(0.65_0.18_145)] hover:bg-[oklch(0.6_0.18_145)] px-6 py-3.5 text-sm font-semibold text-white w-full transition"
+              disabled={submitting}
+              className="flex items-center justify-center gap-2 rounded-full bg-[oklch(0.65_0.18_145)] hover:bg-[oklch(0.6_0.18_145)] px-6 py-3.5 text-sm font-semibold text-white w-full transition disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <MessageCircle className="h-4 w-4" /> Order through WhatsApp
+              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <MessageCircle className="h-4 w-4" />}
+              {submitting ? "Placing order..." : "Order through WhatsApp"}
             </button>
             <p className="text-xs text-muted-foreground mt-3 text-center">Your order details will be sent to us on WhatsApp.</p>
           </div>
