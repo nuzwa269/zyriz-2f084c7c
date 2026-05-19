@@ -32,6 +32,7 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const { items, total, clear } = useCart();
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [submittedMethod, setSubmittedMethod] = useState<CheckoutDetails["paymentMethod"]>("JazzCash");
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<CheckoutDetails>({
@@ -53,12 +54,42 @@ function CheckoutPage() {
     );
   }
 
-  const onSubmit = (data: CheckoutDetails) => {
-    const msg = buildOrderMessage(items, total, data);
-    setSubmittedMethod(data.paymentMethod);
-    window.open(whatsappUrl(msg), "_blank");
-    clear();
-    setSent(true);
+  const onSubmit = async (data: CheckoutDetails) => {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from("orders").insert({
+        customer_name: data.name,
+        customer_email: data.email,
+        customer_phone: data.phone,
+        address: data.address,
+        city: data.city,
+        postal_code: data.postalCode || null,
+        note: data.note || null,
+        items: items.map((i) => ({
+          productId: i.productId,
+          slug: i.slug,
+          name: i.name,
+          price: i.price,
+          quantity: i.quantity,
+          image: i.image,
+        })),
+        subtotal: total,
+        total,
+        payment_method: data.paymentMethod,
+        whatsapp_opened: true,
+      });
+      if (error) throw error;
+      const msg = buildOrderMessage(items, total, data);
+      setSubmittedMethod(data.paymentMethod);
+      window.open(whatsappUrl(msg), "_blank");
+      clear();
+      setSent(true);
+    } catch (e: any) {
+      toast.error("Could not save your order. Please try again.", { description: e?.message });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (sent) {
