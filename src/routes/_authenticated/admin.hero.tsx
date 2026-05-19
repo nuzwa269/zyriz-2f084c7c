@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Upload, Trash2, ImageIcon } from "lucide-react";
 import imageCompression from "browser-image-compression";
 import { siteAssetUrl } from "@/lib/site-asset-url";
-import heroFallback from "@/assets/hero-khaddar.jpg";
+import heroFallback from "@/assets/hero-jewelry.jpg";
 
 export const Route = createFileRoute("/_authenticated/admin/hero")({
   component: AdminHero,
