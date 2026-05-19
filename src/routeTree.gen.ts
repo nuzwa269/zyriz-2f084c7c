@@ -24,12 +24,14 @@ import { Route as AuthenticatedAdminVideosRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminSocialRouteImport } from './routes/_authenticated/admin.social'
 import { Route as AuthenticatedAdminSectionsRouteImport } from './routes/_authenticated/admin.sections'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
+import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminHeroRouteImport } from './routes/_authenticated/admin.hero'
 import { Route as AuthenticatedAdminFooterRouteImport } from './routes/_authenticated/admin.footer'
 import { Route as AuthenticatedAdminFeaturesRouteImport } from './routes/_authenticated/admin.features'
 import { Route as AuthenticatedAdminCategoriesRouteImport } from './routes/_authenticated/admin.categories'
 import { Route as AuthenticatedAdminProductsNewRouteImport } from './routes/_authenticated/admin.products.new'
 import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
+import { Route as AuthenticatedAdminOrdersIdRouteImport } from './routes/_authenticated/admin.orders.$id'
 
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
@@ -109,6 +111,12 @@ const AuthenticatedAdminReviewsRoute =
     path: '/admin/reviews',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminOrdersRoute =
+  AuthenticatedAdminOrdersRouteImport.update({
+    id: '/admin/orders',
+    path: '/admin/orders',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminHeroRoute = AuthenticatedAdminHeroRouteImport.update({
   id: '/admin/hero',
   path: '/admin/hero',
@@ -144,6 +152,12 @@ const AuthenticatedAdminProductsIdRoute =
     path: '/admin/products/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminOrdersIdRoute =
+  AuthenticatedAdminOrdersIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedAdminOrdersRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -159,11 +173,13 @@ export interface FileRoutesByFullPath {
   '/admin/features': typeof AuthenticatedAdminFeaturesRoute
   '/admin/footer': typeof AuthenticatedAdminFooterRoute
   '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRouteWithChildren
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/sections': typeof AuthenticatedAdminSectionsRoute
   '/admin/social': typeof AuthenticatedAdminSocialRoute
   '/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/orders/$id': typeof AuthenticatedAdminOrdersIdRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
 }
@@ -181,11 +197,13 @@ export interface FileRoutesByTo {
   '/admin/features': typeof AuthenticatedAdminFeaturesRoute
   '/admin/footer': typeof AuthenticatedAdminFooterRoute
   '/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRouteWithChildren
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/sections': typeof AuthenticatedAdminSectionsRoute
   '/admin/social': typeof AuthenticatedAdminSocialRoute
   '/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/orders/$id': typeof AuthenticatedAdminOrdersIdRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
 }
@@ -205,11 +223,13 @@ export interface FileRoutesById {
   '/_authenticated/admin/features': typeof AuthenticatedAdminFeaturesRoute
   '/_authenticated/admin/footer': typeof AuthenticatedAdminFooterRoute
   '/_authenticated/admin/hero': typeof AuthenticatedAdminHeroRoute
+  '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRouteWithChildren
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/sections': typeof AuthenticatedAdminSectionsRoute
   '/_authenticated/admin/social': typeof AuthenticatedAdminSocialRoute
   '/_authenticated/admin/videos': typeof AuthenticatedAdminVideosRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/orders/$id': typeof AuthenticatedAdminOrdersIdRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/_authenticated/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
 }
@@ -229,11 +249,13 @@ export interface FileRouteTypes {
     | '/admin/features'
     | '/admin/footer'
     | '/admin/hero'
+    | '/admin/orders'
     | '/admin/reviews'
     | '/admin/sections'
     | '/admin/social'
     | '/admin/videos'
     | '/admin/'
+    | '/admin/orders/$id'
     | '/admin/products/$id'
     | '/admin/products/new'
   fileRoutesByTo: FileRoutesByTo
@@ -251,11 +273,13 @@ export interface FileRouteTypes {
     | '/admin/features'
     | '/admin/footer'
     | '/admin/hero'
+    | '/admin/orders'
     | '/admin/reviews'
     | '/admin/sections'
     | '/admin/social'
     | '/admin/videos'
     | '/admin'
+    | '/admin/orders/$id'
     | '/admin/products/$id'
     | '/admin/products/new'
   id:
@@ -274,11 +298,13 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/features'
     | '/_authenticated/admin/footer'
     | '/_authenticated/admin/hero'
+    | '/_authenticated/admin/orders'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/sections'
     | '/_authenticated/admin/social'
     | '/_authenticated/admin/videos'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/orders/$id'
     | '/_authenticated/admin/products/$id'
     | '/_authenticated/admin/products/new'
   fileRoutesById: FileRoutesById
@@ -403,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/orders': {
+      id: '/_authenticated/admin/orders'
+      path: '/admin/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/hero': {
       id: '/_authenticated/admin/hero'
       path: '/admin/hero'
@@ -445,14 +478,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/orders/$id': {
+      id: '/_authenticated/admin/orders/$id'
+      path: '/$id'
+      fullPath: '/admin/orders/$id'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersIdRouteImport
+      parentRoute: typeof AuthenticatedAdminOrdersRoute
+    }
   }
 }
+
+interface AuthenticatedAdminOrdersRouteChildren {
+  AuthenticatedAdminOrdersIdRoute: typeof AuthenticatedAdminOrdersIdRoute
+}
+
+const AuthenticatedAdminOrdersRouteChildren: AuthenticatedAdminOrdersRouteChildren =
+  {
+    AuthenticatedAdminOrdersIdRoute: AuthenticatedAdminOrdersIdRoute,
+  }
+
+const AuthenticatedAdminOrdersRouteWithChildren =
+  AuthenticatedAdminOrdersRoute._addFileChildren(
+    AuthenticatedAdminOrdersRouteChildren,
+  )
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminCategoriesRoute: typeof AuthenticatedAdminCategoriesRoute
   AuthenticatedAdminFeaturesRoute: typeof AuthenticatedAdminFeaturesRoute
   AuthenticatedAdminFooterRoute: typeof AuthenticatedAdminFooterRoute
   AuthenticatedAdminHeroRoute: typeof AuthenticatedAdminHeroRoute
+  AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRouteWithChildren
   AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
   AuthenticatedAdminSectionsRoute: typeof AuthenticatedAdminSectionsRoute
   AuthenticatedAdminSocialRoute: typeof AuthenticatedAdminSocialRoute
@@ -467,6 +522,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminFeaturesRoute: AuthenticatedAdminFeaturesRoute,
   AuthenticatedAdminFooterRoute: AuthenticatedAdminFooterRoute,
   AuthenticatedAdminHeroRoute: AuthenticatedAdminHeroRoute,
+  AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRouteWithChildren,
   AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
   AuthenticatedAdminSectionsRoute: AuthenticatedAdminSectionsRoute,
   AuthenticatedAdminSocialRoute: AuthenticatedAdminSocialRoute,
@@ -495,3 +551,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
