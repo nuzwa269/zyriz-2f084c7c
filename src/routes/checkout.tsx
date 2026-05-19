@@ -214,9 +214,11 @@ function CheckoutPage() {
             </div>
             <button
               type="submit"
-              className="flex items-center justify-center gap-2 rounded-full bg-[oklch(0.65_0.18_145)] hover:bg-[oklch(0.6_0.18_145)] px-6 py-3.5 text-sm font-semibold text-white w-full transition"
+              disabled={submitting}
+              className="flex items-center justify-center gap-2 rounded-full bg-[oklch(0.65_0.18_145)] hover:bg-[oklch(0.6_0.18_145)] px-6 py-3.5 text-sm font-semibold text-white w-full transition disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <MessageCircle className="h-4 w-4" /> Order through WhatsApp
+              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <MessageCircle className="h-4 w-4" />}
+              {submitting ? "Placing order..." : "Order through WhatsApp"}
             </button>
             <p className="text-xs text-muted-foreground mt-3 text-center">Your order details will be sent to us on WhatsApp.</p>
           </div>
