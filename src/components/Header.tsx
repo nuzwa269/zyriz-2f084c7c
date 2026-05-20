@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useCart } from "@/lib/cart";
 import { useTheme } from "@/hooks/use-theme";
-import { SITE } from "@/lib/config";
+import { useBrand } from "@/hooks/use-brand";
 import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import {
 export function Header() {
   const { count } = useCart();
   const { theme, toggle } = useTheme();
+  const { name: brandName, logoUrl } = useBrand();
   const [open, setOpen] = useState(false);
   const [mobileCatsOpen, setMobileCatsOpen] = useState(false);
 
@@ -43,7 +44,8 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-3 sm:px-6 gap-2">
         <Link to="/" className="flex items-center gap-2 min-w-0">
-          <span className="font-serif text-xl sm:text-2xl font-semibold gold-gradient truncate">{SITE.name}</span>
+          {logoUrl && <img src={logoUrl} alt={brandName} className="h-8 w-8 object-contain shrink-0" />}
+          <span className="font-serif text-xl sm:text-2xl font-semibold gold-gradient truncate">{brandName}</span>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {nav.map((n) =>

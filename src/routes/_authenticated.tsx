@@ -3,8 +3,8 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
+import { useBrand } from "@/hooks/use-brand";
 import { LogOut, Sun, Moon, Menu, X } from "lucide-react";
-import { SITE } from "@/lib/config";
 
 const ADMIN_NAV = [
   { to: "/admin", label: "Products" },
@@ -18,6 +18,7 @@ const ADMIN_NAV = [
   { to: "/admin/sections", label: "Sections" },
   { to: "/admin/videos", label: "Videos" },
   { to: "/admin/social", label: "Social" },
+  { to: "/admin/settings", label: "Settings" },
   { to: "/", label: "View Site" },
 ] as const;
 
@@ -45,6 +46,7 @@ function AuthLayout() {
   const { isAdmin, loading, user } = useAuth();
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
+  const brand = useBrand();
   const [mobileOpen, setMobileOpen] = useState(false);
   const currentPath = useRouterState({ select: (s) => s.location.pathname });
 
@@ -72,7 +74,10 @@ function AuthLayout() {
       <header className="border-b border-border bg-card sticky top-0 z-40">
         <div className="mx-auto max-w-7xl flex items-center justify-between gap-2 px-3 sm:px-4 py-3">
           <div className="flex items-center gap-3 lg:gap-6 min-w-0 flex-1">
-            <Link to="/admin" className="font-serif text-lg sm:text-xl gold-gradient truncate shrink-0">{SITE.name} Admin</Link>
+            <Link to="/admin" className="flex items-center gap-2 min-w-0 shrink-0">
+              {brand.logoUrl && <img src={brand.logoUrl} alt={brand.name} className="h-7 w-7 object-contain shrink-0" />}
+              <span className="font-serif text-lg sm:text-xl gold-gradient truncate">{brand.name} Admin</span>
+            </Link>
             <nav className="hidden lg:flex items-center gap-5">
               {ADMIN_NAV.map((n) => (
                 <Link key={n.to} to={n.to} className="text-sm text-muted-foreground hover:text-primary whitespace-nowrap">
