@@ -3,8 +3,8 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
+import { useBrand } from "@/hooks/use-brand";
 import { LogOut, Sun, Moon, Menu, X } from "lucide-react";
-import { SITE } from "@/lib/config";
 
 const ADMIN_NAV = [
   { to: "/admin", label: "Products" },
