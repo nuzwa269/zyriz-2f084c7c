@@ -338,7 +338,15 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      {sections.map(renderSection)}
+      {sections.map((s) => {
+        const node = renderSection(s);
+        if (!node) return null;
+        return (
+          <div key={s.id} className="animate-fade-in">
+            {node}
+          </div>
+        );
+      })}
       <Footer />
     </div>
   );
