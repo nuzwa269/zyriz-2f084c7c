@@ -8,6 +8,7 @@ import { SITE } from "@/lib/config";
 
 const ADMIN_NAV = [
   { to: "/admin", label: "Products" },
+  { to: "/admin/analytics", label: "Analytics" },
   { to: "/admin/orders", label: "Orders" },
   { to: "/admin/categories", label: "Categories" },
   { to: "/admin/reviews", label: "Reviews" },
