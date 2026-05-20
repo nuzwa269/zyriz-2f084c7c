@@ -46,6 +46,7 @@ function AuthLayout() {
   const { isAdmin, loading, user } = useAuth();
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
+  const brand = useBrand();
   const [mobileOpen, setMobileOpen] = useState(false);
   const currentPath = useRouterState({ select: (s) => s.location.pathname });
 
