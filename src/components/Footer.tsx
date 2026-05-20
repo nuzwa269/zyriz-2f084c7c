@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SITE } from "@/lib/config";
+import { useBrand } from "@/hooks/use-brand";
 import { getPlatform } from "@/lib/social-platforms";
 
 type FooterText = {
@@ -13,6 +14,7 @@ type FooterText = {
 };
 
 export function Footer() {
+  const { name: brandName, description: brandDescription, logoUrl } = useBrand();
   const { data: text } = useQuery<FooterText>({
     queryKey: ["footer-text"],
     queryFn: async () => {
@@ -50,11 +52,11 @@ export function Footer() {
     },
   });
 
-  const description = text?.description?.trim() || SITE.description;
+  const description = text?.description?.trim() || brandDescription || SITE.description;
   const whatsapp = text?.whatsapp?.trim() || SITE.whatsappNumber;
   const email = text?.email?.trim() || SITE.email;
   const address = text?.address?.trim() || "";
-  const copyright = text?.copyright?.trim() || `© ${new Date().getFullYear()} ${SITE.name}. All rights reserved.`;
+  const copyright = text?.copyright?.trim() || `© ${new Date().getFullYear()} ${brandName}. All rights reserved.`;
 
   const grouped = links.reduce<Record<string, typeof links>>((acc, l) => {
     (acc[l.section] = acc[l.section] || []).push(l);
@@ -67,7 +69,10 @@ export function Footer() {
     <footer className="mt-16 sm:mt-24 border-t border-border/60 bg-card/40">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:py-12 sm:px-6 grid gap-8 sm:gap-10 sm:grid-cols-2 md:grid-cols-3">
         <div className="sm:col-span-2 md:col-span-1">
-          <h3 className="font-serif text-2xl gold-gradient">{SITE.name}</h3>
+          <div className="flex items-center gap-2">
+            {logoUrl && <img src={logoUrl} alt={brandName} className="h-8 w-8 object-contain" />}
+            <h3 className="font-serif text-2xl gold-gradient">{brandName}</h3>
+          </div>
           <p className="mt-3 text-sm text-muted-foreground max-w-xs">{description}</p>
         </div>
 
