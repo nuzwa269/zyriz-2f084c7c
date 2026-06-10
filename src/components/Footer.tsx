@@ -52,6 +52,20 @@ export function Footer() {
     },
   });
 
+  const { data: pages = [] } = useQuery({
+    queryKey: ["footer-pages"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_pages")
+        .select("id, slug, title")
+        .eq("is_published", true)
+        .eq("show_in_footer", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   const description = text?.description?.trim() || brandDescription || SITE.description;
   const whatsapp = text?.whatsapp?.trim() || SITE.whatsappNumber;
   const email = text?.email?.trim() || SITE.email;
