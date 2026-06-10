@@ -18,6 +18,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminVideosRouteImport } from './routes/_authenticated/admin.videos'
@@ -79,6 +80,11 @@ const IndexRoute = IndexRouteImport.update({
 const ProductSlugRoute = ProductSlugRouteImport.update({
   id: '/product/$slug',
   path: '/product/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PSlugRoute = PSlugRouteImport.update({
+  id: '/p/$slug',
+  path: '/p/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/p/$slug': typeof PSlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
@@ -223,6 +230,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/p/$slug': typeof PSlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
   '/category/$slug': typeof CategorySlugRoute
+  '/p/$slug': typeof PSlugRoute
   '/product/$slug': typeof ProductSlugRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/categories': typeof AuthenticatedAdminCategoriesRoute
@@ -283,6 +292,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/shop'
     | '/category/$slug'
+    | '/p/$slug'
     | '/product/$slug'
     | '/admin/analytics'
     | '/admin/categories'
@@ -311,6 +321,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/shop'
     | '/category/$slug'
+    | '/p/$slug'
     | '/product/$slug'
     | '/admin/analytics'
     | '/admin/categories'
@@ -340,6 +351,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/shop'
     | '/category/$slug'
+    | '/p/$slug'
     | '/product/$slug'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/categories'
@@ -370,6 +382,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ShopRoute: typeof ShopRoute
   CategorySlugRoute: typeof CategorySlugRoute
+  PSlugRoute: typeof PSlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
@@ -436,6 +449,13 @@ declare module '@tanstack/react-router' {
       path: '/product/$slug'
       fullPath: '/product/$slug'
       preLoaderRoute: typeof ProductSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/p/$slug': {
+      id: '/p/$slug'
+      path: '/p/$slug'
+      fullPath: '/p/$slug'
+      preLoaderRoute: typeof PSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/category/$slug': {
@@ -645,6 +665,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ShopRoute: ShopRoute,
   CategorySlugRoute: CategorySlugRoute,
+  PSlugRoute: PSlugRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport
