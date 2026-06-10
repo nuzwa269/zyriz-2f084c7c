@@ -18,6 +18,7 @@ const ADMIN_NAV = [
   { to: "/admin/sections", label: "Sections" },
   { to: "/admin/videos", label: "Videos" },
   { to: "/admin/social", label: "Social" },
+  { to: "/admin/pages", label: "Pages" },
   { to: "/admin/settings", label: "Settings" },
   { to: "/", label: "View Site" },
 ] as const;
