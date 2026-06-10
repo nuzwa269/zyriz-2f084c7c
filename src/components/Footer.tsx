@@ -52,6 +52,20 @@ export function Footer() {
     },
   });
 
+  const { data: pages = [] } = useQuery({
+    queryKey: ["footer-pages"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_pages")
+        .select("id, slug, title")
+        .eq("is_published", true)
+        .eq("show_in_footer", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   const description = text?.description?.trim() || brandDescription || SITE.description;
   const whatsapp = text?.whatsapp?.trim() || SITE.whatsappNumber;
   const email = text?.email?.trim() || SITE.email;
@@ -102,8 +116,24 @@ export function Footer() {
             <h4 className="text-sm uppercase tracking-widest text-primary mb-3">Explore</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/shop" className="hover:text-primary">Shop</Link></li>
-              <li><Link to="/about" className="hover:text-primary">About</Link></li>
-              <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
+              {pages.map((p) => (
+                <li key={p.id}>
+                  <Link to="/p/$slug" params={{ slug: p.slug }} className="hover:text-primary">{p.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {sectionEntries.length > 0 && pages.length > 0 && (
+          <div>
+            <h4 className="text-sm uppercase tracking-widest text-primary mb-3">Information</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              {pages.map((p) => (
+                <li key={p.id}>
+                  <Link to="/p/$slug" params={{ slug: p.slug }} className="hover:text-primary">{p.title}</Link>
+                </li>
+              ))}
             </ul>
           </div>
         )}
