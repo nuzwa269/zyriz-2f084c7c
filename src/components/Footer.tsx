@@ -116,8 +116,24 @@ export function Footer() {
             <h4 className="text-sm uppercase tracking-widest text-primary mb-3">Explore</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link to="/shop" className="hover:text-primary">Shop</Link></li>
-              <li><Link to="/about" className="hover:text-primary">About</Link></li>
-              <li><Link to="/contact" className="hover:text-primary">Contact</Link></li>
+              {pages.map((p) => (
+                <li key={p.id}>
+                  <Link to="/p/$slug" params={{ slug: p.slug }} className="hover:text-primary">{p.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {sectionEntries.length > 0 && pages.length > 0 && (
+          <div>
+            <h4 className="text-sm uppercase tracking-widest text-primary mb-3">Information</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              {pages.map((p) => (
+                <li key={p.id}>
+                  <Link to="/p/$slug" params={{ slug: p.slug }} className="hover:text-primary">{p.title}</Link>
+                </li>
+              ))}
             </ul>
           </div>
         )}
