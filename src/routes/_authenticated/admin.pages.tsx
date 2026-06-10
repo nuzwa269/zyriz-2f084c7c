@@ -60,7 +60,8 @@ function AdminPagesList() {
 
   const toggleMut = useMutation({
     mutationFn: async ({ id, field, value }: { id: string; field: "is_published" | "show_in_footer"; value: boolean }) => {
-      const { error } = await supabase.from("site_pages").update({ [field]: value }).eq("id", id);
+      const patch = field === "is_published" ? { is_published: value } : { show_in_footer: value };
+      const { error } = await supabase.from("site_pages").update(patch).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
