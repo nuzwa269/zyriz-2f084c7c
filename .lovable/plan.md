@@ -1,55 +1,75 @@
-# Orders / Checkout Submissions کا نظام
+## Variable Products (WooCommerce-style)
 
-## مقصد
-جونہی یوزر `Checkout` فارم سبمٹ کرے، اس کا مکمل ڈیٹا (کسٹمر تفصیلات + کارٹ آئٹمز + پیمنٹ میتھڈ + ٹوٹل) ڈیٹا بیس میں محفوظ ہو جائے — چاہے بعد میں WhatsApp پر بھیجے یا نہ بھیجے۔ ایڈمن پینل میں ایک نیا "Orders" صفحہ بنایا جائے گا جہاں سے یہ ساری سبمیشنز دیکھی، سرچ کی، اور بطورِ status اپڈیٹ کی جا سکیں۔
+Add full attribute + variation system to products. Admin can define attributes (Size, Color, etc.) per product, then generate variations (combinations) with their own price, sale price, stock, SKU, and image. Customers pick each attribute via buttons/dropdown on the product page; cart and checkout track the selected variation.
 
-> نوٹ: صرف "Add to Cart" کرنے پر (جب تک یوزر فارم نہیں بھرتا) کوئی identifying ڈیٹا موجود نہیں ہوتا، اس لیے فارم سبمٹ کا لمحہ ہی save trigger ہے۔ یہی وہ مرحلہ ہے جہاں یوزر اپنا نام/فون/پتہ دیتا ہے۔
+### Database changes (one migration)
 
----
+New tables in `public`:
 
-## کام کے مراحل
+- `product_attributes` — per-product attribute definitions
+  - `id`, `product_id` (FK → products), `name` (e.g. "Size"), `display_order`
+- `product_attribute_values` — values for each attribute
+  - `id`, `attribute_id` (FK), `value` (e.g. "Large"), `display_order`
+- `product_variations` — one row per combination
+  - `id`, `product_id` (FK), `sku`, `price`, `sale_price`, `stock`, `image_path`, `is_active`, `display_order`
+- `product_variation_values` — junction linking variation ↔ chosen attribute values
+  - `variation_id` (FK), `attribute_value_id` (FK), PK both
 
-### 1) ڈیٹا بیس: نئی `orders` ٹیبل
-ایک نئی ٹیبل بنائی جائے گی جس میں ہر فارم سبمیشن ایک row کے طور پر محفوظ ہو گی:
+Add to `products`:
+- `product_type` text default `'simple'` (values: `simple` | `variable`)
 
-- کسٹمر: name, email, phone, address, city, postal_code, note
-- آرڈر: items (JSON — productId, name, price, quantity, image, slug)، subtotal، total
-- payment_method (JazzCash / EasyPaisa / Bank Transfer)
-- status (default: "new") — ایڈمن بعد میں بدل سکے گا
-- whatsapp_opened (boolean) — کیا یوزر نے WhatsApp بٹن کلک کیا تھا
-- created_at
+GRANTs: `SELECT` to `anon` + `authenticated` (public reads), full CRUD to `service_role`; RLS policies allow admin-only writes via `has_role(auth.uid(),'admin')`, public read for active rows.
 
-RLS:
-- Insert: anonymous یوزرز بھی کر سکیں گے (تاکہ بغیر لاگ ان فارم سبمٹ ہو سکے)
-- Select / Update / Delete: صرف admin
+### Admin UI
 
-### 2) Checkout صفحہ (`src/routes/checkout.tsx`)
-`onSubmit` کے اندر ترتیب یوں ہو گی:
-1. پہلے `orders` میں row insert کرو۔
-2. کامیاب insert پر ہی WhatsApp ونڈو کھولو اور کارٹ clear کرو۔
-3. اگر DB insert ناکام ہو، یوزر کو error toast دکھا کر دوبارہ try کرنے دو (WhatsApp فلو رکا رہے)۔
+Extend `ProductForm.tsx`:
+- Add a **Product type** selector: Simple / Variable.
+- When Variable:
+  - **Attributes panel** — add/remove attributes (name + comma-separated values, like Woo).
+  - **Generate variations** button — creates all combinations; existing ones preserved.
+  - **Variations list** — each row editable: price, sale price, stock, SKU, image upload, active toggle, delete.
+  - Hide top-level price/stock fields (those become per-variation).
+- Save flow: upsert attributes/values, then variations + junction rows in one transaction-style sequence.
 
-موجودہ UI، WhatsApp میسج فارمیٹ، payment تفصیلات، اور success صفحہ — کچھ بھی نہیں بدلا جائے گا۔
+### Frontend (product page)
 
-### 3) ایڈمن پینل: نیا `Orders` صفحہ
-- نیا route: `src/routes/_authenticated/admin.orders.tsx` (list) + `admin.orders.$id.tsx` (detail)
-- List: تازہ ترین پہلے، ہر row میں — تاریخ، نام، فون، شہر، ٹوٹل، payment method، status badge
-- Detail: مکمل کسٹمر معلومات، آئٹمز کی فہرست (image + name + qty + price)، note، WhatsApp re-send بٹن (وہی موجودہ میسج بنا کر)
-- Status بدلنے کا dropdown: `new`, `contacted`, `paid`, `shipped`, `completed`, `cancelled` (default `new`)
-- Admin sidebar میں نیا "Orders" لنک شامل (`src/routes/_authenticated.tsx`)
+`src/routes/product.$slug.tsx`:
+- Detect `product_type === 'variable'`, load attributes + variations.
+- Render one button-group per attribute (selected state highlighted).
+- Resolve selected attribute combination → matching variation.
+- Show that variation's price / sale price / stock / image; disable Add-to-Cart until a complete valid combination is chosen.
+- Greyed-out unavailable combinations (no matching active variation or out of stock).
 
-### 4) چھوٹی تفصیلات
-- موجودہ کوئی فیچر، product، image، یا فلو نہیں بدلے گا۔
-- صرف 3 فائلز edit (checkout, _authenticated sidebar) اور 2 نئی فائلز (admin.orders.tsx, admin.orders.$id.tsx) + 1 migration۔
+### Cart & checkout
 
----
+`src/lib/cart.tsx` + `checkout.tsx`:
+- Cart item gains optional `variation_id` and `variation_label` (e.g. "Red / Large").
+- Cart key becomes `productId + variationId` so different variations of same product are separate lines.
+- Order `items` JSON stores variation id + label + variation price snapshot.
+- Stock decrement on order (if already implemented) targets the variation row.
 
-## ٹیکنیکل تفصیل (مختصر)
+### Files to add / edit
 
-- `orders` table پر RLS: `INSERT TO anon, authenticated WITH CHECK (true)` (کوئی sensitive read نہیں)، باقی operations صرف `private.has_role(auth.uid(), 'admin')`۔
-- Insert براہِ راست browser `supabase` client سے ہو گا (anonymous-friendly، نیا server function درکار نہیں)۔
-- Items کو `jsonb` کالم میں store کیا جائے گا تاکہ پراڈکٹ بعد میں ڈیلیٹ ہو جائے تب بھی آرڈر کا ریکارڈ مکمل رہے۔
+**New**
+- `supabase/migrations/<ts>_variable_products.sql`
+- `src/components/admin/VariationsEditor.tsx` (attributes + variations UI block)
+- `src/components/product/VariationPicker.tsx` (frontend attribute buttons)
 
----
+**Edit**
+- `src/components/ProductForm.tsx` — product type selector + embed VariationsEditor
+- `src/routes/product.$slug.tsx` — load variations, render picker, gate add-to-cart
+- `src/components/ProductCard.tsx` — show "From Rs. X" price range for variable products
+- `src/lib/cart.tsx` — variation-aware cart items
+- `src/routes/cart.tsx` — show variation label per line
+- `src/routes/checkout.tsx` — include variation info in order items
+- `src/routes/_authenticated/admin.orders.$id.tsx` — display variation label
+- `src/integrations/supabase/types.ts` — regenerated after migration
 
-اگر یہ پلان درست ہے تو **Implement plan** دبائیں — میں migration پہلے بھیجو
+### Notes / decisions
+
+- Variations are scoped per-product (no global attribute taxonomy yet — keeps it simple; can add later).
+- Existing simple products stay as `product_type='simple'` with no migration of data needed.
+- Variation image is optional; falls back to first product image.
+- I'll ship this in two stages within one turn: (1) migration + admin editor, (2) frontend picker + cart/checkout wiring.
+
+Ready to build?
