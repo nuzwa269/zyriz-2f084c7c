@@ -7,12 +7,18 @@ export type CartItem = {
   price: number;
   image: string;
   quantity: number;
+  variationId?: string | null;
+  variationLabel?: string | null;
 };
 
 const KEY = "cart-v1";
 const listeners = new Set<() => void>();
 const EMPTY: CartItem[] = [];
 let cache: CartItem[] = EMPTY;
+
+export function itemKey(productId: string, variationId?: string | null) {
+  return variationId ? `${productId}::${variationId}` : productId;
+}
 
 function load(): CartItem[] {
   if (typeof window === "undefined") return EMPTY;
@@ -23,7 +29,6 @@ function load(): CartItem[] {
   }
 }
 
-// Initialize cache on first import (browser only)
 if (typeof window !== "undefined") {
   cache = load();
 }
@@ -52,21 +57,22 @@ export function useCart() {
 
   const add = useCallback((item: Omit<CartItem, "quantity">, qty = 1) => {
     const items = read();
-    const ix = items.findIndex((i) => i.productId === item.productId);
+    const k = itemKey(item.productId, item.variationId);
+    const ix = items.findIndex((i) => itemKey(i.productId, i.variationId) === k);
     if (ix >= 0) items[ix].quantity += qty;
     else items.push({ ...item, quantity: qty });
-    write(items);
+    write([...items]);
   }, []);
 
-  const setQty = useCallback((productId: string, qty: number) => {
+  const setQty = useCallback((key: string, qty: number) => {
     const items = read().map((i) =>
-      i.productId === productId ? { ...i, quantity: Math.max(1, qty) } : i
+      itemKey(i.productId, i.variationId) === key ? { ...i, quantity: Math.max(1, qty) } : i
     );
     write(items);
   }, []);
 
-  const remove = useCallback((productId: string) => {
-    write(read().filter((i) => i.productId !== productId));
+  const remove = useCallback((key: string) => {
+    write(read().filter((i) => itemKey(i.productId, i.variationId) !== key));
   }, []);
 
   const clear = useCallback(() => write([]), []);
