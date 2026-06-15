@@ -353,5 +353,4 @@ export async function saveVariationsState(productId: string, state: VariationsSt
   }
 }
 
-// Suppress unused warning for effect import (kept for future use)
 void useEffect;
