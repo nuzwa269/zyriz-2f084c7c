@@ -352,5 +352,3 @@ export async function saveVariationsState(productId: string, state: VariationsSt
     }
   }
 }
-
-void useEffect;
