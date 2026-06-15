@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import imageCompression from "browser-image-compression";
 import { Plus, X, Trash2, Wand2, Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
