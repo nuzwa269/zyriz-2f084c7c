@@ -25,7 +25,8 @@ export function buildOrderMessage(items: CartItem[], total: number, d: CheckoutD
   lines.push("");
   lines.push("🛒 *Items:*");
   items.forEach((i, ix) => {
-    lines.push(`${ix + 1}. ${i.name} × ${i.quantity} — Rs ${(i.price * i.quantity).toLocaleString()}`);
+    const label = i.variationLabel ? ` (${i.variationLabel})` : "";
+    lines.push(`${ix + 1}. ${i.name}${label} × ${i.quantity} — Rs ${(i.price * i.quantity).toLocaleString()}`);
   });
   lines.push("");
   lines.push(`💰 *Total: Rs ${total.toLocaleString()}*`);

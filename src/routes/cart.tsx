@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
-import { useCart } from "@/lib/cart";
+import { useCart, itemKey } from "@/lib/cart";
 import { productImageUrl } from "@/lib/image-url";
 import { supabase } from "@/integrations/supabase/client";
 import { Minus, Plus, Trash2, ArrowRight } from "lucide-react";
@@ -48,25 +48,30 @@ function CartPage() {
         ) : (
           <div className="grid lg:grid-cols-[1fr_320px] gap-8">
             <div className="space-y-4">
-              {items.map((item) => (
-                <div key={item.productId} className="flex gap-3 sm:gap-4 rounded-lg border border-border/40 bg-card p-3 sm:p-4">
+              {items.map((item) => {
+                const k = itemKey(item.productId, item.variationId);
+                return (
+                <div key={k} className="flex gap-3 sm:gap-4 rounded-lg border border-border/40 bg-card p-3 sm:p-4">
                   <img src={productImageUrl(item.image)} alt={item.name} className="h-20 w-20 sm:h-24 sm:w-24 rounded-md object-cover shrink-0" />
                   <div className="flex-1 min-w-0 flex flex-col justify-between gap-2">
                     <div className="min-w-0">
                       <Link to="/product/$slug" params={{ slug: item.slug }} className="font-serif text-base sm:text-lg hover:text-primary line-clamp-2 block">{item.name}</Link>
+                      {item.variationLabel && (
+                        <p className="text-xs text-muted-foreground mt-0.5">{item.variationLabel}</p>
+                      )}
                       <p className="text-primary mt-1">Rs {item.price.toLocaleString()}</p>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <button onClick={() => setQty(item.productId, item.quantity - 1)} className="rounded-md border border-border p-1.5 hover:border-primary"><Minus className="h-3 w-3" /></button>
+                        <button onClick={() => setQty(k, item.quantity - 1)} className="rounded-md border border-border p-1.5 hover:border-primary"><Minus className="h-3 w-3" /></button>
                         <span className="w-8 text-center text-sm">{item.quantity}</span>
-                        <button onClick={() => setQty(item.productId, item.quantity + 1)} className="rounded-md border border-border p-1.5 hover:border-primary"><Plus className="h-3 w-3" /></button>
+                        <button onClick={() => setQty(k, item.quantity + 1)} className="rounded-md border border-border p-1.5 hover:border-primary"><Plus className="h-3 w-3" /></button>
                       </div>
-                      <button onClick={() => remove(item.productId)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
+                      <button onClick={() => remove(k)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
                     </div>
                   </div>
                 </div>
-              ))}
+              );})}
             </div>
             <div className="rounded-lg border border-border/40 bg-card p-6 h-fit">
               <h2 className="font-serif text-xl mb-4">Order Summary</h2>

@@ -91,6 +91,8 @@ function AdminOrderDetail() {
         price: Number(i.price),
         image: i.image,
         quantity: Number(i.quantity),
+        variationId: i.variationId ?? null,
+        variationLabel: i.variationLabel ?? null,
       })),
       Number(order.total),
       details,
@@ -158,6 +160,9 @@ function AdminOrderDetail() {
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="font-medium truncate">{i.name}</div>
+                    {i.variationLabel && (
+                      <div className="text-xs text-primary">{i.variationLabel}</div>
+                    )}
                     <div className="text-xs text-muted-foreground">Qty {i.quantity} × Rs {Number(i.price).toLocaleString()}</div>
                   </div>
                   <div className="text-sm text-primary whitespace-nowrap">

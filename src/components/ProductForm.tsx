@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import imageCompression from "browser-image-compression";
 import { supabase } from "@/integrations/supabase/client";
 import { productImageUrl } from "@/lib/image-url";
 import { toast } from "sonner";
 import { Upload, X, Loader2 } from "lucide-react";
+import { VariationsEditor, loadVariationsState, saveVariationsState, type VariationsState } from "@/components/admin/VariationsEditor";
 
 export type ProductFormValues = {
   name: string;
@@ -18,6 +19,7 @@ export type ProductFormValues = {
   is_new_arrival: boolean;
   is_best_seller: boolean;
   category_id: string | null;
+  product_type: "simple" | "variable";
 };
 
 export function slugify(s: string) {
@@ -47,6 +49,7 @@ export function ProductForm({
     is_new_arrival: initial?.is_new_arrival ?? true,
     is_best_seller: initial?.is_best_seller ?? false,
     category_id: initial?.category_id ?? null,
+    product_type: (initial?.product_type as any) ?? "simple",
   });
   const { data: categories = [] } = useQuery({
     queryKey: ["categories-list"],
@@ -62,6 +65,13 @@ export function ProductForm({
   const [images, setImages] = useState(initialImages);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [variationsState, setVariationsState] = useState<VariationsState>({ attributes: [], variations: [] });
+
+  useEffect(() => {
+    if (productId) {
+      loadVariationsState(productId).then(setVariationsState).catch(() => {});
+    }
+  }, [productId]);
 
   const update = <K extends keyof ProductFormValues>(k: K, v: ProductFormValues[K]) => {
     setValues((p) => ({ ...p, [k]: v, ...(k === "name" && !productId ? { slug: slugify(v as string) } : {}) }));
@@ -119,21 +129,26 @@ export function ProductForm({
         id = data.id;
       }
 
-      // Sync images
       if (id) {
-        // Delete removed
         const existingIds = initialImages.map((i) => i.storage_path);
         const currentPaths = images.map((i) => i.storage_path);
         const toDelete = initialImages.filter((i) => !currentPaths.includes(i.storage_path));
         if (toDelete.length) {
           await supabase.from("product_images").delete().in("id", toDelete.map((i) => i.id));
         }
-        // Insert new
         const toInsert = images.filter((i) => !existingIds.includes(i.storage_path));
         if (toInsert.length) {
           await supabase.from("product_images").insert(
             toInsert.map((i, idx) => ({ product_id: id!, storage_path: i.storage_path, display_order: idx }))
           );
+        }
+
+        if (values.product_type === "variable") {
+          await saveVariationsState(id, variationsState);
+        } else {
+          // remove any leftover variations if switched to simple
+          await supabase.from("product_attributes").delete().eq("product_id", id);
+          await supabase.from("product_variations").delete().eq("product_id", id);
         }
       }
 
@@ -147,6 +162,7 @@ export function ProductForm({
   };
 
   const input = "w-full rounded-md border border-border bg-input px-3 py-2 text-sm";
+  const isVariable = values.product_type === "variable";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
@@ -164,33 +180,64 @@ export function ProductForm({
           <label className="text-sm text-muted-foreground">Description</label>
           <textarea className={input} rows={5} value={values.description} onChange={(e) => update("description", e.target.value)} />
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm text-muted-foreground">Price (Rs) *</label>
-            <input type="number" step="0.01" className={input} value={values.price} onChange={(e) => update("price", Number(e.target.value))} />
-          </div>
-          <div>
-            <label className="text-sm text-muted-foreground">Sale price (Rs) — optional</label>
-            <input
-              type="number"
-              step="0.01"
-              placeholder="Leave empty if not on sale"
-              className={input}
-              value={values.sale_price ?? ""}
-              onChange={(e) => update("sale_price", e.target.value === "" ? null : Number(e.target.value))}
-            />
-          </div>
+
+        <div>
+          <label className="text-sm text-muted-foreground">Product Type</label>
+          <select
+            className={input}
+            value={values.product_type}
+            onChange={(e) => update("product_type", e.target.value as "simple" | "variable")}
+          >
+            <option value="simple">Simple — single price & stock</option>
+            <option value="variable">Variable — multiple variations (size, color, etc.)</option>
+          </select>
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm text-muted-foreground">Color</label>
-            <input className={input} value={values.color} onChange={(e) => update("color", e.target.value)} />
+
+        {!isVariable && (
+          <>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm text-muted-foreground">Price (Rs) *</label>
+                <input type="number" step="0.01" className={input} value={values.price} onChange={(e) => update("price", Number(e.target.value))} />
+              </div>
+              <div>
+                <label className="text-sm text-muted-foreground">Sale price (Rs) — optional</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Leave empty if not on sale"
+                  className={input}
+                  value={values.sale_price ?? ""}
+                  onChange={(e) => update("sale_price", e.target.value === "" ? null : Number(e.target.value))}
+                />
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm text-muted-foreground">Color</label>
+                <input className={input} value={values.color} onChange={(e) => update("color", e.target.value)} />
+              </div>
+              <div>
+                <label className="text-sm text-muted-foreground">Stock</label>
+                <input type="number" className={input} value={values.stock} onChange={(e) => update("stock", Number(e.target.value))} />
+              </div>
+            </div>
+          </>
+        )}
+
+        {isVariable && (
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm text-muted-foreground">"From" price (Rs) — shown on listings</label>
+              <input type="number" step="0.01" className={input} value={values.price} onChange={(e) => update("price", Number(e.target.value))} />
+            </div>
+            <div>
+              <label className="text-sm text-muted-foreground">Color (label only)</label>
+              <input className={input} value={values.color} onChange={(e) => update("color", e.target.value)} />
+            </div>
           </div>
-          <div>
-            <label className="text-sm text-muted-foreground">Stock</label>
-            <input type="number" className={input} value={values.stock} onChange={(e) => update("stock", Number(e.target.value))} />
-          </div>
-        </div>
+        )}
+
         <div>
           <label className="text-sm text-muted-foreground">Category</label>
           <select
@@ -219,6 +266,10 @@ export function ProductForm({
           </label>
         </div>
       </div>
+
+      {isVariable && (
+        <VariationsEditor state={variationsState} onChange={setVariationsState} productIdHint={productId} />
+      )}
 
       <div className="rounded-lg border border-border bg-card p-6">
         <h2 className="font-serif text-xl mb-4">Images</h2>
