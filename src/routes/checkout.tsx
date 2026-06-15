@@ -73,6 +73,8 @@ function CheckoutPage() {
           price: i.price,
           quantity: i.quantity,
           image: i.image,
+          variationId: i.variationId ?? null,
+          variationLabel: i.variationLabel ?? null,
         })),
         subtotal: total,
         total,
@@ -202,9 +204,11 @@ function CheckoutPage() {
             <h2 className="font-serif text-xl mb-4">Order Summary</h2>
             <div className="space-y-2 mb-4">
               {items.map((i) => (
-                <div key={i.productId} className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">{i.name} × {i.quantity}</span>
-                  <span>Rs {(i.price * i.quantity).toLocaleString()}</span>
+                <div key={`${i.productId}-${i.variationId ?? ""}`} className="flex justify-between text-sm gap-2">
+                  <span className="text-muted-foreground truncate">
+                    {i.name}{i.variationLabel ? ` (${i.variationLabel})` : ""} × {i.quantity}
+                  </span>
+                  <span className="whitespace-nowrap">Rs {(i.price * i.quantity).toLocaleString()}</span>
                 </div>
               ))}
             </div>
