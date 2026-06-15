@@ -1,4 +1,4 @@
-import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
@@ -40,7 +40,7 @@ function ProductPage() {
     queryKey: ["product-variations", product?.id],
     enabled: !!product && isVariable,
     queryFn: async (): Promise<VariationData> => {
-      const [{ data: attrs }, { data: vars }, { data: links }] = await Promise.all([
+      const [{ data: attrs }, { data: vars }] = await Promise.all([
         supabase
           .from("product_attributes")
           .select("id, name, display_order, product_attribute_values(id, value, display_order)")
@@ -51,19 +51,15 @@ function ProductPage() {
           .select("*")
           .eq("product_id", product!.id)
           .order("display_order"),
-        supabase
-          .from("product_variation_values")
-          .select("variation_id, attribute_value_id")
-          .in("variation_id", []),
       ]);
       const varIds = (vars ?? []).map((v: any) => v.id);
-      let allLinks = links ?? [];
+      let allLinks: { variation_id: string; attribute_value_id: string }[] = [];
       if (varIds.length > 0) {
         const { data: l2 } = await supabase
           .from("product_variation_values")
           .select("variation_id, attribute_value_id")
           .in("variation_id", varIds);
-        allLinks = l2 ?? [];
+        allLinks = (l2 ?? []) as any;
       }
       return {
         attributes: (attrs ?? []).map((a: any) => ({
